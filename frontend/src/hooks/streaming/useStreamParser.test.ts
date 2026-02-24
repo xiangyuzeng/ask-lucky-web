@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useStreamParser } from "./useStreamParser";
 import type { StreamingContext } from "./useMessageProcessor";
-import type { SDKMessage } from "../../types";
+
 import { generateId } from "../../utils/id";
 
 // Mock dependencies
@@ -30,7 +30,7 @@ describe("useStreamParser", () => {
     it("should detect ExitPlanMode tool use and create plan message", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -70,7 +70,7 @@ describe("useStreamParser", () => {
     it("should handle ExitPlanMode with empty plan content", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -108,7 +108,7 @@ describe("useStreamParser", () => {
     it("should handle ExitPlanMode with missing input field", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -146,7 +146,7 @@ describe("useStreamParser", () => {
     it("should handle ExitPlanMode with missing toolUseId", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -186,7 +186,7 @@ describe("useStreamParser", () => {
     it("should handle non-string plan content gracefully", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -226,7 +226,7 @@ describe("useStreamParser", () => {
     it("should not create plan message for non-ExitPlanMode tools", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -362,7 +362,7 @@ describe("useStreamParser", () => {
     it("should handle assistant message with both text and ExitPlanMode tool use", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -410,7 +410,7 @@ describe("useStreamParser", () => {
     it("should handle multiple tool uses including ExitPlanMode", () => {
       const { result } = renderHook(() => useStreamParser());
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "test-session",
         uuid: generateId(),
@@ -468,7 +468,7 @@ describe("useStreamParser", () => {
       const { result } = renderHook(() => useStreamParser());
       mockContext.hasReceivedInit = true;
 
-      const assistantMessage: Extract<SDKMessage, { type: "assistant" }> = {
+      const assistantMessage = {
         type: "assistant",
         session_id: "session-with-plan",
         uuid: generateId(),

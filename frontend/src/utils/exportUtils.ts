@@ -1,11 +1,13 @@
 import type { ChatMessage } from "../types";
 
 export async function exportToPDF(
-  messages: ChatMessage[],
+  _messages: ChatMessage[],
   title: string,
 ): Promise<void> {
   // Dynamic import to avoid loading heavy libraries upfront
+  // @ts-expect-error html2canvas is an optional runtime dependency
   const { default: html2canvas } = await import("html2canvas");
+  // @ts-expect-error jspdf is an optional runtime dependency
   const { default: jsPDF } = await import("jspdf");
 
   const content = document.getElementById("chat-messages");

@@ -205,8 +205,10 @@ describe("Plan Rejection Workflow Tests", () => {
       // Verify stream data structure
       expect(mockStreamData.type).toBe("claude_json");
       expect(mockStreamData.data.type).toBe("user");
-      expect(mockStreamData.data.message.content[0].type).toBe("tool_result");
-      expect(mockStreamData.data.message.content[0].is_error).toBe(true);
+      const streamContentItem = mockStreamData.data.message
+        .content[0] as unknown as Record<string, unknown>;
+      expect(streamContentItem.type).toBe("tool_result");
+      expect(streamContentItem.is_error).toBe(true);
     });
 
     it("should handle tool_result message processing for plan rejection", () => {
@@ -277,7 +279,10 @@ describe("Plan Rejection Workflow Tests", () => {
 
       const result = createExitPlanModeToolResult(sessionId, toolUseId);
       expect(result.session_id).toBeUndefined();
-      expect(result.message.content[0].tool_use_id).toBeNull();
+      expect(
+        (result.message.content[0] as unknown as Record<string, unknown>)
+          .tool_use_id,
+      ).toBeNull();
     });
   });
 
@@ -290,10 +295,10 @@ describe("Plan Rejection Workflow Tests", () => {
       );
 
       // Rejection should have is_error: true
-      expect(rejectionResult.message.content[0].is_error).toBe(true);
-      expect(rejectionResult.message.content[0].content).toBe(
-        "Exit plan mode?",
-      );
+      const rejectionItem = rejectionResult.message
+        .content[0] as unknown as Record<string, unknown>;
+      expect(rejectionItem.is_error).toBe(true);
+      expect(rejectionItem.content).toBe("Exit plan mode?");
 
       // Acceptance would not create a tool_result message at all
       // (This is the current behavior - acceptance just proceeds with the plan)
@@ -309,9 +314,14 @@ describe("Plan Rejection Workflow Tests", () => {
       );
 
       // The tool_result should reference the original tool_use
-      expect(rejectionResult.message.content[0].tool_use_id).toBe(
-        originalToolUseId,
-      );
+      expect(
+        (
+          rejectionResult.message.content[0] as unknown as Record<
+            string,
+            unknown
+          >
+        ).tool_use_id,
+      ).toBe(originalToolUseId);
       expect(rejectionResult.type).toBe("user");
     });
   });

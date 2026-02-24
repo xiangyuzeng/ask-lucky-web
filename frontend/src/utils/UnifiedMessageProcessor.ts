@@ -117,7 +117,7 @@ export class UnifiedMessageProcessor {
    * Handle permission errors during streaming
    */
   private handlePermissionError(
-    contentItem: { tool_use_id?: string; content: string },
+    contentItem: { tool_use_id?: string; content?: unknown },
     context: ProcessingContext,
   ): void {
     // Immediately abort the current request
@@ -150,7 +150,7 @@ export class UnifiedMessageProcessor {
   private processToolResult(
     contentItem: {
       tool_use_id?: string;
-      content: string;
+      content?: unknown;
       is_error?: boolean;
     },
     context: ProcessingContext,
@@ -275,23 +275,21 @@ export class UnifiedMessageProcessor {
     contentItem: {
       id?: string;
       name?: string;
-      input?: Record<string, unknown>;
+      input?: unknown;
     },
     context: ProcessingContext,
     options: ProcessingOptions,
   ): void {
+    const inputObj = (contentItem.input || {}) as Record<string, unknown>;
+
     // Cache tool_use information for later permission error handling and tool_result correlation
     if (contentItem.id && contentItem.name) {
-      this.cacheToolUse(
-        contentItem.id,
-        contentItem.name,
-        contentItem.input || {},
-      );
+      this.cacheToolUse(contentItem.id, contentItem.name, inputObj);
     }
 
     // Special handling for ExitPlanMode - create plan message instead of tool message
     if (contentItem.name === "ExitPlanMode") {
-      const planContent = (contentItem.input?.plan as string) || "";
+      const planContent = (inputObj.plan as string) || "";
       const planMessage = {
         type: "plan" as const,
         plan: planContent,
@@ -302,18 +300,24 @@ export class UnifiedMessageProcessor {
     } else if (contentItem.name === "TodoWrite") {
       // Special handling for TodoWrite - create todo message from input
       const todoMessage = createTodoMessageFromInput(
-        contentItem.input || {},
+        inputObj,
         options.timestamp,
       );
       if (todoMessage) {
         context.addMessage(todoMessage);
       } else {
         // Fallback to regular tool message if todo parsing fails
-        const toolMessage = createToolMessage(contentItem, options.timestamp);
+        const toolMessage = createToolMessage(
+          { name: contentItem.name, input: inputObj },
+          options.timestamp,
+        );
         context.addMessage(toolMessage);
       }
     } else {
-      const toolMessage = createToolMessage(contentItem, options.timestamp);
+      const toolMessage = createToolMessage(
+        { name: contentItem.name, input: inputObj },
+        options.timestamp,
+      );
       context.addMessage(toolMessage);
     }
   }
