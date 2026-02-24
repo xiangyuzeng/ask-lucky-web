@@ -1,18 +1,14 @@
 /**
  * Vercel Serverless Function Entry Point
  *
- * Self-contained catch-all serverless function handling all /api/* routes.
- * Does NOT import from backend/ to avoid .ts extension and logger initialization issues.
+ * Self-contained catch-all serverless function using native Vercel handler format.
+ * No framework dependencies — only @anthropic-ai/sdk for chat.
  */
 
-import { Hono } from "hono";
-import { handle } from "hono/vercel";
-import { cors } from "hono/cors";
-import Anthropic, { APIError } from "@anthropic-ai/sdk";
-import type { MessageParam } from "@anthropic-ai/sdk/resources/messages";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import Anthropic from "@anthropic-ai/sdk";
 
 export const config = {
-  runtime: "nodejs",
   maxDuration: 60,
 };
 
@@ -23,9 +19,23 @@ const DEFAULT_MAX_TOKENS = 4096;
 const DEFAULT_SYSTEM_PROMPT =
   "你是Lucky，一个乐于助人的AI助手。你必须始终使用中文回答所有问题。当被问到你的名字时，你要说你是Lucky。无论用户使用什么语言提问，你都必须用中文回复。";
 
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+interface MessageParam {
+  role: "user" | "assistant";
+  content: string;
+}
+
+interface StreamResponse {
+  type: "claude_json" | "error" | "done" | "aborted";
+  data?: unknown;
+  error?: string;
+}
+
 // ── In-Memory Conversation Store ───────────────────────────────────────────────
 
 const conversations = new Map<string, MessageParam[]>();
+const requestAbortControllers = new Map<string, AbortController>();
 
 function createSession(): string {
   return crypto.randomUUID();
@@ -107,55 +117,62 @@ function createResultMessage(
   };
 }
 
-// ── Error Formatting ───────────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────────────────────
 
-function formatApiError(error: Error): string {
-  const isUsingProxy = !!process.env.ANTHROPIC_BASE_URL;
-
-  if (error instanceof APIError) {
-    const status = error.status;
-    const errorBody = error.error as Record<string, unknown> | undefined;
-
-    let message = error.message;
-    if (errorBody?.error && typeof errorBody.error === "object") {
-      const nested = errorBody.error as Record<string, unknown>;
-      if (nested.message) {
-        message = String(nested.message);
-      }
-      if (nested.code) {
-        message = `[${nested.code}] ${message}`;
-      }
-    }
-
-    if (isUsingProxy) {
-      return `Proxy error (${status}): ${message}. Check your ANTHROPIC_BASE_URL configuration.`;
-    }
-    return `API error (${status}): ${message}`;
-  }
-
-  return error.message;
+function setCorsHeaders(res: ServerResponse): void {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 }
 
-// ── Stream Response Types ──────────────────────────────────────────────────────
+function sendJson(res: ServerResponse, data: unknown, status = 200): void {
+  res.writeHead(status, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(data));
+}
 
-interface StreamResponse {
-  type: "claude_json" | "error" | "done" | "aborted";
-  data?: unknown;
-  error?: string;
+function parseBody(req: IncomingMessage): Promise<Record<string, unknown>> {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    req.on("data", (chunk: Buffer) => {
+      body += chunk.toString();
+    });
+    req.on("end", () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on("error", reject);
+  });
 }
 
 // ── Chat Execution ─────────────────────────────────────────────────────────────
 
-const requestAbortControllers = new Map<string, AbortController>();
+async function handleChat(
+  res: ServerResponse,
+  body: Record<string, unknown>,
+): Promise<void> {
+  const apiKey = process.env.ANTHROPIC_API_KEY || "";
+  const model = process.env.ANTHROPIC_MODEL;
 
-async function* executeAnthropicChat(
-  message: string,
-  requestId: string,
-  apiKey: string,
-  sessionId?: string,
-  model?: string,
-  workingDirectory?: string,
-): AsyncGenerator<StreamResponse> {
+  if (!apiKey) {
+    sendJson(res, { error: "ANTHROPIC_API_KEY not configured" }, 500);
+    return;
+  }
+
+  const message = body.message as string;
+  const requestId = body.requestId as string;
+  const sessionId = body.sessionId as string | undefined;
+  const workingDirectory = body.workingDirectory as string | undefined;
+
+  // Set streaming headers
+  res.writeHead(200, {
+    "Content-Type": "application/x-ndjson",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
   const startTime = Date.now();
 
   try {
@@ -175,8 +192,8 @@ async function* executeAnthropicChat(
     // Get conversation history
     const history = getConversation(currentSessionId);
 
-    // Emit system init message
-    yield {
+    // Send system init message
+    const initMsg: StreamResponse = {
       type: "claude_json",
       data: createSystemInitMessage(
         currentSessionId,
@@ -184,12 +201,10 @@ async function* executeAnthropicChat(
         model || DEFAULT_MODEL,
       ),
     };
+    res.write(JSON.stringify(initMsg) + "\n");
 
     // Build messages with history
-    const messages: MessageParam[] = [
-      ...history,
-      { role: "user" as const, content: message },
-    ];
+    const messages = [...history, { role: "user" as const, content: message }];
 
     // Stream response from Anthropic
     const stream = client.messages.stream({
@@ -206,7 +221,8 @@ async function* executeAnthropicChat(
 
     for await (const event of stream) {
       if (abortController.signal.aborted) {
-        yield { type: "aborted" };
+        res.write(JSON.stringify({ type: "aborted" } as StreamResponse) + "\n");
+        res.end();
         return;
       }
 
@@ -214,10 +230,11 @@ async function* executeAnthropicChat(
         const delta = event.delta;
         if ("text" in delta) {
           fullResponse += delta.text;
-          yield {
+          const chunk: StreamResponse = {
             type: "claude_json",
             data: createAssistantStreamMessage(delta.text, messageId),
           };
+          res.write(JSON.stringify(chunk) + "\n");
         }
       } else if (event.type === "message_delta") {
         if (event.usage) {
@@ -235,25 +252,28 @@ async function* executeAnthropicChat(
       addToConversation(currentSessionId, message, fullResponse);
     }
 
-    // Emit result message
+    // Send result message
     const durationMs = Date.now() - startTime;
-    yield {
+    const resultMsg: StreamResponse = {
       type: "claude_json",
       data: createResultMessage(inputTokens, outputTokens, durationMs),
     };
-
-    yield { type: "done" };
+    res.write(JSON.stringify(resultMsg) + "\n");
+    res.write(JSON.stringify({ type: "done" } as StreamResponse) + "\n");
+    res.end();
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
-      yield { type: "aborted" };
+      res.write(JSON.stringify({ type: "aborted" } as StreamResponse) + "\n");
     } else {
       const errorMessage =
-        error instanceof Error ? formatApiError(error) : String(error);
-      yield {
+        error instanceof Error ? error.message : String(error);
+      const errorMsg: StreamResponse = {
         type: "error",
         error: errorMessage,
       };
+      res.write(JSON.stringify(errorMsg) + "\n");
     }
+    res.end();
   } finally {
     if (requestAbortControllers.has(requestId)) {
       requestAbortControllers.delete(requestId);
@@ -261,93 +281,58 @@ async function* executeAnthropicChat(
   }
 }
 
-// ── Hono App ───────────────────────────────────────────────────────────────────
+// ── Main Handler ───────────────────────────────────────────────────────────────
 
-const app = new Hono().basePath("/api");
+export default async function handler(
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<void> {
+  setCorsHeaders(res);
 
-// CORS middleware
-app.use(
-  "*",
-  cors({
-    origin: "*",
-    allowMethods: ["GET", "POST", "OPTIONS"],
-    allowHeaders: ["Content-Type"],
-  }),
-);
-
-// ── Routes ─────────────────────────────────────────────────────────────────────
-
-// Projects — always return empty (no local filesystem on Vercel)
-app.get("/projects", (c) => {
-  return c.json({ projects: [] });
-});
-
-// Histories — always return empty
-app.get("/projects/:encodedProjectName/histories", (c) => {
-  return c.json({ conversations: [] });
-});
-
-// Conversation — always return empty
-app.get("/projects/:encodedProjectName/histories/:sessionId", (c) => {
-  return c.json({ messages: [], metadata: {} });
-});
-
-// Abort — cancel in-flight request
-app.post("/abort/:requestId", (c) => {
-  const requestId = c.req.param("requestId");
-  const controller = requestAbortControllers.get(requestId);
-  if (controller) {
-    controller.abort();
-    requestAbortControllers.delete(requestId);
-  }
-  return c.json({ success: true });
-});
-
-// Chat — stream Anthropic API responses
-app.post("/chat", async (c) => {
-  const body = await c.req.json();
-  const apiKey = process.env.ANTHROPIC_API_KEY || "";
-  const model = process.env.ANTHROPIC_MODEL;
-
-  if (!apiKey) {
-    return c.json({ error: "ANTHROPIC_API_KEY not configured" }, 500);
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
   }
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of executeAnthropicChat(
-          body.message,
-          body.requestId,
-          apiKey,
-          body.sessionId,
-          model,
-          body.workingDirectory,
-        )) {
-          const data = JSON.stringify(chunk) + "\n";
-          controller.enqueue(new TextEncoder().encode(data));
-        }
-        controller.close();
-      } catch (error) {
-        const errorResponse: StreamResponse = {
-          type: "error",
-          error: error instanceof Error ? error.message : String(error),
-        };
-        controller.enqueue(
-          new TextEncoder().encode(JSON.stringify(errorResponse) + "\n"),
-        );
-        controller.close();
-      }
-    },
-  });
+  const url = req.url || "";
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "application/x-ndjson",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
-    },
-  });
-});
+  // Route: GET /api/projects
+  if (url.startsWith("/api/projects") && req.method === "GET") {
+    // Check if it's a histories request
+    if (url.includes("/histories")) {
+      sendJson(
+        res,
+        url.includes("/histories/")
+          ? { messages: [], metadata: {} }
+          : { conversations: [] },
+      );
+      return;
+    }
+    sendJson(res, { projects: [] });
+    return;
+  }
 
-export default handle(app);
+  // Route: POST /api/chat
+  if (url === "/api/chat" && req.method === "POST") {
+    const body = await parseBody(req);
+    await handleChat(res, body);
+    return;
+  }
+
+  // Route: POST /api/abort/:requestId
+  if (url.startsWith("/api/abort/") && req.method === "POST") {
+    const requestId = url.replace("/api/abort/", "");
+    const controller = requestAbortControllers.get(requestId);
+    if (controller) {
+      controller.abort();
+      requestAbortControllers.delete(requestId);
+    }
+    sendJson(res, { success: true });
+    return;
+  }
+
+  // 404 for unknown routes
+  sendJson(res, { error: "Not found" }, 404);
+}
