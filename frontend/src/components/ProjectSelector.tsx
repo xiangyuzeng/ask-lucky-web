@@ -24,6 +24,12 @@ export function ProjectSelector() {
         throw new Error(response.statusText);
       }
       const data: ProjectsResponse = await response.json();
+      if (data.projects.length === 0) {
+        // No projects found (e.g., on Vercel where ~/.claude.json doesn't exist)
+        // Auto-navigate to a default project to skip project selection
+        navigate("/projects/default");
+        return;
+      }
       setProjects(data.projects);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));

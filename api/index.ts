@@ -51,20 +51,25 @@ app.use(
 );
 
 // API routes
-app.get("/projects", (c) => handleProjectsRequest(c));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Hono version mismatch between root and backend node_modules
+app.get("/projects", (c) => handleProjectsRequest(c as any));
 
 app.get("/projects/:encodedProjectName/histories", (c) =>
-  handleHistoriesRequest(c),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleHistoriesRequest(c as any),
 );
 
 app.get("/projects/:encodedProjectName/histories/:sessionId", (c) =>
-  handleConversationRequest(c),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleConversationRequest(c as any),
 );
 
 app.post("/abort/:requestId", (c) =>
-  handleAbortRequest(c, requestAbortControllers),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleAbortRequest(c as any, requestAbortControllers),
 );
 
-app.post("/chat", (c) => handleChatRequest(c, requestAbortControllers));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.post("/chat", (c) => handleChatRequest(c as any, requestAbortControllers));
 
 export default handle(app);
