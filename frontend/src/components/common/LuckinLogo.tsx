@@ -13,20 +13,19 @@ export function LuckinLogo({
     <div
       role="img"
       aria-label="Luckin Logo"
-      className={`inline-flex items-center justify-center rounded-full ${showPulse ? "animate-pulse-soft" : ""} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full overflow-hidden ${showPulse ? "animate-pulse-soft" : ""} ${className}`}
       style={{
         width: size,
         height: size,
-        background: "linear-gradient(135deg, #182D71, #1E3A8A)",
-        padding: size * 0.12,
+        backgroundColor: "#0A3A7A",
         flexShrink: 0,
       }}
     >
       <img
         src="/luckin-logo.png"
         alt=""
-        width={size * 0.76}
-        height={size * 0.76}
+        width={size * 0.82}
+        height={size * 0.82}
         style={{ objectFit: "contain" }}
         draggable={false}
       />
