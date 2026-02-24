@@ -1,0 +1,146 @@
+{
+  "app": {
+    "title": "瑞幸运营控制台",
+    "subtitle": "内部运营助手"
+  },
+  "welcome": {
+    "greeting": "欢迎使用瑞幸运营控制台",
+    "subtitle": "选择您的部门，开始使用AI智能助手",
+    "selectDepartment": "选择部门"
+  },
+  "departments": {
+    "general": {
+      "name": "通用",
+      "description": "通用咨询和帮助"
+    },
+    "marketing": {
+      "name": "市场营销",
+      "description": "营销活动分析、客户洞察和促销策略"
+    },
+    "accounting": {
+      "name": "财务会计",
+      "description": "财务报表、对账和合规查询"
+    },
+    "devops": {
+      "name": "运维 / DBA",
+      "description": "基础设施监控、数据库查询和系统健康"
+    },
+    "product": {
+      "name": "产品",
+      "description": "功能分析、用户行为和产品指标"
+    },
+    "supplyChain": {
+      "name": "供应链",
+      "description": "库存管理、物流和供应商协调"
+    },
+    "executive": {
+      "name": "高管",
+      "description": "高层KPI、战略洞察和跨部门汇总"
+    }
+  },
+  "sidebar": {
+    "conversations": "对话记录",
+    "templates": "模板",
+    "pinned": "已固定",
+    "search": "搜索对话...",
+    "newChat": "新对话",
+    "noConversations": "暂无对话记录",
+    "noResults": "未找到结果"
+  },
+  "navigation": {
+    "newConversation": "新建对话",
+    "backToPrevious": "返回上一个",
+    "home": "首页"
+  },
+  "quickActions": {
+    "marketing": {
+      "action1": "查看营销报告",
+      "action2": "分析客户数据",
+      "action3": "竞品对比"
+    },
+    "accounting": {
+      "action1": "生成财务报表",
+      "action2": "费用分析",
+      "action3": "现金流查询"
+    },
+    "devops": {
+      "action1": "系统状态",
+      "action2": "查看日志",
+      "action3": "性能分析"
+    },
+    "product": {
+      "action1": "用户分析",
+      "action2": "功能使用",
+      "action3": "反馈汇总"
+    },
+    "supplyChain": {
+      "action1": "库存查询",
+      "action2": "供应商评估",
+      "action3": "物流追踪"
+    },
+    "executive": {
+      "action1": "业绩总览",
+      "action2": "KPI仪表盘",
+      "action3": "风险报告"
+    }
+  },
+  "chat": {
+    "placeholder": "询问任何关于您部门的问题...",
+    "send": "发送",
+    "stop": "停止",
+    "thinking": "思考中...",
+    "characterCount": "{{count}} / {{max}} 字符",
+    "emptyState": {
+      "title": "开始与Claude对话",
+      "subtitle": "在下方输入您的问题"
+    }
+  },
+  "feedback": {
+    "helpful": "有帮助",
+    "notHelpful": "没帮助",
+    "tags": {
+      "accurate": "准确",
+      "clear": "清晰",
+      "actionable": "可操作",
+      "incomplete": "不完整",
+      "incorrect": "不正确",
+      "confusing": "令人困惑"
+    }
+  },
+  "export": {
+    "title": "导出对话",
+    "pdf": "导出为PDF",
+    "markdown": "导出为Markdown",
+    "slack": "复制到Slack",
+    "csv": "导出数据为CSV"
+  },
+  "settings": {
+    "title": "设置",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统",
+    "language": "语言"
+  },
+  "shortcuts": {
+    "title": "键盘快捷键",
+    "focusInput": "聚焦输入框",
+    "newChat": "新建对话",
+    "export": "打开导出菜单",
+    "help": "显示快捷键",
+    "toggleLanguage": "切换语言"
+  },
+  "toast": {
+    "copied": "已复制到剪贴板",
+    "exported": "导出完成",
+    "error": "发生错误",
+    "feedbackSent": "反馈已提交"
+  },
+  "common": {
+    "cancel": "取消",
+    "confirm": "确认",
+    "close": "关闭",
+    "loading": "加载中...",
+    "retry": "重试"
+  }
+}

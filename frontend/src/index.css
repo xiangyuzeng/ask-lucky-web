@@ -1,0 +1,153 @@
+@import "tailwindcss";
+@import "./luckin-theme.css";
+
+@variant dark (.dark &);
+
+/* Base styles */
+body {
+  font-family: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  background-color: var(--luckin-bg);
+  color: var(--luckin-text-primary);
+  transition: background-color var(--luckin-transition), color var(--luckin-transition);
+}
+
+/* Luckin utility classes */
+.bg-luckin-primary {
+  background-color: var(--luckin-primary);
+}
+
+.bg-luckin-surface {
+  background-color: var(--luckin-surface);
+}
+
+.bg-luckin-bg {
+  background-color: var(--luckin-bg);
+}
+
+.bg-luckin-sky {
+  background-color: var(--luckin-sky);
+}
+
+.bg-luckin-accent {
+  background-color: var(--luckin-accent);
+}
+
+.text-luckin-primary {
+  color: var(--luckin-primary);
+}
+
+.text-luckin-secondary {
+  color: var(--luckin-text-secondary);
+}
+
+.text-luckin-muted {
+  color: var(--luckin-text-muted);
+}
+
+.text-luckin-accent {
+  color: var(--luckin-accent);
+}
+
+.border-luckin {
+  border-color: var(--luckin-border);
+}
+
+.border-luckin-light {
+  border-color: var(--luckin-border-light);
+}
+
+.shadow-luckin {
+  box-shadow: var(--luckin-shadow);
+}
+
+.shadow-luckin-md {
+  box-shadow: var(--luckin-shadow-md);
+}
+
+.shadow-luckin-lg {
+  box-shadow: var(--luckin-shadow-lg);
+}
+
+/* Button variants */
+.btn-luckin-primary {
+  background-color: var(--luckin-primary);
+  color: var(--luckin-text-inverse);
+  transition: background-color var(--luckin-transition);
+}
+
+.btn-luckin-primary:hover {
+  background-color: var(--luckin-primary-hover);
+}
+
+.btn-luckin-accent {
+  background-color: var(--luckin-accent);
+  color: var(--luckin-text-inverse);
+  transition: background-color var(--luckin-transition);
+}
+
+.btn-luckin-accent:hover {
+  background-color: var(--luckin-accent-hover);
+}
+
+/* Status colors */
+.text-luckin-success {
+  color: var(--luckin-success);
+}
+
+.text-luckin-warning {
+  color: var(--luckin-warning);
+}
+
+.text-luckin-error {
+  color: var(--luckin-error);
+}
+
+.bg-luckin-success {
+  background-color: var(--luckin-success-bg);
+}
+
+.bg-luckin-warning {
+  background-color: var(--luckin-warning-bg);
+}
+
+.bg-luckin-error {
+  background-color: var(--luckin-error-bg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--luckin-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--luckin-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--luckin-text-muted);
+}
+
+/* Focus styles */
+.focus-luckin:focus {
+  outline: 2px solid var(--luckin-primary);
+  outline-offset: 2px;
+}
+
+.focus-luckin:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Transition utilities */
+.transition-luckin {
+  transition: all var(--luckin-transition);
+}
+
+.transition-luckin-slow {
+  transition: all var(--luckin-transition-slow);
+}

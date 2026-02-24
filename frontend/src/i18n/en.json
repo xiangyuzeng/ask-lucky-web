@@ -1,0 +1,146 @@
+{
+  "app": {
+    "title": "Luckin Ops Console",
+    "subtitle": "Internal Operations Assistant"
+  },
+  "welcome": {
+    "greeting": "Welcome to Luckin Ops Console",
+    "subtitle": "Select your department to get started with AI-powered assistance",
+    "selectDepartment": "Select a department"
+  },
+  "departments": {
+    "general": {
+      "name": "General",
+      "description": "General inquiries and assistance"
+    },
+    "marketing": {
+      "name": "Marketing",
+      "description": "Campaign analytics, customer insights, and promotional strategies"
+    },
+    "accounting": {
+      "name": "Accounting",
+      "description": "Financial reports, reconciliation, and compliance queries"
+    },
+    "devops": {
+      "name": "DevOps / DBA",
+      "description": "Infrastructure monitoring, database queries, and system health"
+    },
+    "product": {
+      "name": "Product",
+      "description": "Feature analytics, user behavior, and product metrics"
+    },
+    "supplyChain": {
+      "name": "Supply Chain",
+      "description": "Inventory management, logistics, and vendor coordination"
+    },
+    "executive": {
+      "name": "Executive",
+      "description": "High-level KPIs, strategic insights, and cross-department summaries"
+    }
+  },
+  "sidebar": {
+    "conversations": "Conversations",
+    "templates": "Templates",
+    "pinned": "Pinned",
+    "search": "Search conversations...",
+    "newChat": "New Chat",
+    "noConversations": "No conversations yet",
+    "noResults": "No results found"
+  },
+  "navigation": {
+    "newConversation": "New Conversation",
+    "backToPrevious": "Back to Previous",
+    "home": "Home"
+  },
+  "quickActions": {
+    "marketing": {
+      "action1": "View Marketing Report",
+      "action2": "Analyze Customer Data",
+      "action3": "Competitor Comparison"
+    },
+    "accounting": {
+      "action1": "Generate Financial Report",
+      "action2": "Expense Analysis",
+      "action3": "Cash Flow Query"
+    },
+    "devops": {
+      "action1": "System Status",
+      "action2": "View Logs",
+      "action3": "Performance Analysis"
+    },
+    "product": {
+      "action1": "User Analytics",
+      "action2": "Feature Usage",
+      "action3": "Feedback Summary"
+    },
+    "supplyChain": {
+      "action1": "Inventory Query",
+      "action2": "Supplier Evaluation",
+      "action3": "Logistics Tracking"
+    },
+    "executive": {
+      "action1": "Performance Overview",
+      "action2": "KPI Dashboard",
+      "action3": "Risk Report"
+    }
+  },
+  "chat": {
+    "placeholder": "Ask anything about your department...",
+    "send": "Send",
+    "stop": "Stop",
+    "thinking": "Thinking...",
+    "characterCount": "{{count}} / {{max}} characters",
+    "emptyState": {
+      "title": "Start a conversation with Claude",
+      "subtitle": "Type your message below to begin"
+    }
+  },
+  "feedback": {
+    "helpful": "Helpful",
+    "notHelpful": "Not helpful",
+    "tags": {
+      "accurate": "Accurate",
+      "clear": "Clear",
+      "actionable": "Actionable",
+      "incomplete": "Incomplete",
+      "incorrect": "Incorrect",
+      "confusing": "Confusing"
+    }
+  },
+  "export": {
+    "title": "Export Conversation",
+    "pdf": "Export as PDF",
+    "markdown": "Export as Markdown",
+    "slack": "Copy for Slack",
+    "csv": "Export data as CSV"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "language": "Language"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "focusInput": "Focus chat input",
+    "newChat": "New conversation",
+    "export": "Open export menu",
+    "help": "Show shortcuts",
+    "toggleLanguage": "Toggle language"
+  },
+  "toast": {
+    "copied": "Copied to clipboard",
+    "exported": "Export complete",
+    "error": "An error occurred",
+    "feedbackSent": "Feedback submitted"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "loading": "Loading...",
+    "retry": "Retry"
+  }
+}
