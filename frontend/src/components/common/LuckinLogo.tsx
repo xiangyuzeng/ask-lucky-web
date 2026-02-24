@@ -26,7 +26,7 @@ export function LuckinLogo({
         alt=""
         width={size * 0.82}
         height={size * 0.82}
-        style={{ objectFit: "contain" }}
+        style={{ objectFit: "contain", mixBlendMode: "screen" }}
         draggable={false}
       />
     </div>
