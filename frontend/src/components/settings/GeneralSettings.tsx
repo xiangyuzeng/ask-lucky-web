@@ -1,93 +1,57 @@
-import {
-  SunIcon,
-  MoonIcon,
-  CommandLineIcon,
-} from "@heroicons/react/24/outline";
+import { Terminal } from "lucide-react";
 import { useSettings } from "../../hooks/useSettings";
+import { useTranslation } from "../../i18n";
 
 export function GeneralSettings() {
-  const { theme, enterBehavior, toggleTheme, toggleEnterBehavior } =
-    useSettings();
+  const { enterBehavior, toggleEnterBehavior } = useSettings();
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-6">
       {/* Live region for screen reader announcements */}
       <div aria-live="polite" className="sr-only" id="settings-announcements">
-        {theme === "light" ? "Light mode enabled" : "Dark mode enabled"}.{" "}
         {enterBehavior === "send"
-          ? "Enter key sends messages"
-          : "Enter key creates newlines"}
+          ? t("settings.srSend")
+          : t("settings.srNewline")}
         .
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-slate-800 dark:text-slate-100 mb-4">
-          General Settings
+        <h3 className="text-lg font-medium text-[var(--luckin-text-primary)] mb-4">
+          {t("settings.general")}
         </h3>
 
-        {/* Theme Setting */}
         <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 block">
-              Theme
-            </label>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-200 text-left flex-1"
-                role="switch"
-                aria-checked={theme === "dark"}
-                aria-label={`Theme toggle. Currently set to ${theme} mode. Click to switch to ${theme === "light" ? "dark" : "light"} mode.`}
-              >
-                {theme === "light" ? (
-                  <SunIcon className="w-5 h-5 text-yellow-500" />
-                ) : (
-                  <MoonIcon className="w-5 h-5 text-blue-400" />
-                )}
-                <div>
-                  <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                    {theme === "light" ? "Light Mode" : "Dark Mode"}
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">
-                    Click to switch to {theme === "light" ? "dark" : "light"}{" "}
-                    mode
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
-
           {/* Enter Behavior Setting */}
           <div>
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 block">
-              Enter Key Behavior
+            <label className="text-sm font-medium text-[var(--luckin-text-secondary)] mb-2 block">
+              {t("settings.enterKeyBehavior")}
             </label>
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleEnterBehavior}
-                className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-200 text-left flex-1"
+                className="flex items-center gap-3 px-4 py-3 bg-[var(--luckin-bg)] border border-[var(--luckin-border)] rounded-lg hover:bg-[var(--luckin-surface-hover)] transition-all duration-200 text-left flex-1"
                 role="switch"
                 aria-checked={enterBehavior === "send"}
-                aria-label={`Enter key behavior toggle. Currently set to ${enterBehavior === "send" ? "send message" : "newline"}. Click to switch behavior.`}
+                aria-label={`${t("settings.enterKeyBehavior")} - ${enterBehavior === "send" ? t("settings.enterToSend") : t("settings.enterToNewline")}`}
               >
-                <CommandLineIcon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                <Terminal className="w-5 h-5 text-[var(--luckin-primary)]" />
                 <div>
-                  <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                  <div className="text-sm font-medium text-[var(--luckin-text-primary)]">
                     {enterBehavior === "send"
-                      ? "Enter to Send"
-                      : "Enter for Newline"}
+                      ? t("settings.enterToSend")
+                      : t("settings.enterToNewline")}
                   </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">
+                  <div className="text-xs text-[var(--luckin-text-muted)]">
                     {enterBehavior === "send"
-                      ? "Enter sends message, Shift+Enter for newline"
-                      : "Enter adds newline, Shift+Enter sends message"}
+                      ? t("settings.enterToSendDesc")
+                      : t("settings.enterToNewlineDesc")}
                   </div>
                 </div>
               </button>
             </div>
-            <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-              Controls how the Enter key behaves when typing messages in the
-              chat input.
+            <div className="mt-2 text-xs text-[var(--luckin-text-muted)]">
+              {t("settings.enterBehaviorHelp")}
             </div>
           </div>
         </div>

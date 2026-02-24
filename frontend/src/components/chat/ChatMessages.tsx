@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import type { ComponentType } from "react";
 import type { AllMessage } from "../../types";
 import {
   isChatMessage,
@@ -23,6 +24,7 @@ import { useTranslation } from "../../i18n";
 import { useDepartment } from "../../contexts/DepartmentContext";
 import { departments } from "../../data/departments";
 import { DepartmentQuickActions } from "./DepartmentQuickActions";
+import { MessageSquare } from "lucide-react";
 
 interface ChatMessagesProps {
   messages: AllMessage[];
@@ -75,7 +77,7 @@ export function ChatMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex-1 overflow-y-auto bg-white/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 p-3 sm:p-6 mb-3 sm:mb-6 rounded-2xl shadow-sm backdrop-blur-sm flex flex-col"
+      className="flex-1 overflow-y-auto p-3 sm:p-6 mb-3 sm:mb-6 flex flex-col"
     >
       {messages.length === 0 ? (
         <EmptyState onQuickAction={onQuickAction} />
@@ -103,24 +105,25 @@ function EmptyState({ onQuickAction }: EmptyStateProps) {
   const currentDept = departments[department];
   const isDepartmentSelected = department !== "general";
 
+  const DeptIcon: ComponentType<{ className?: string; size?: number }> =
+    currentDept.icon;
+
   return (
-    <div className="flex-1 flex items-center justify-center text-center text-slate-500 dark:text-slate-400">
+    <div className="flex-1 flex items-center justify-center text-center text-[var(--luckin-text-secondary)]">
       <div>
         {isDepartmentSelected ? (
           <>
             {/* Department-specific welcome */}
-            <div className="text-6xl mb-6" style={{ opacity: 0.8 }}>
-              <span role="img" aria-label="department icon">
-                {currentDept.icon}
-              </span>
+            <div className="mb-6 flex justify-center" style={{ opacity: 0.8 }}>
+              <DeptIcon
+                size={48}
+                className="text-[var(--luckin-text-secondary)]"
+              />
             </div>
-            <p
-              className="text-lg font-medium"
-              style={{ color: currentDept.color }}
-            >
+            <p className="text-lg font-bold text-[var(--luckin-text-primary)]">
               {t(`departments.${department}.name`)}
             </p>
-            <p className="text-sm mt-2 opacity-80">
+            <p className="text-sm mt-2 text-[var(--luckin-text-muted)]">
               {t(`departments.${department}.description`)}
             </p>
             {onQuickAction && (
@@ -130,13 +133,16 @@ function EmptyState({ onQuickAction }: EmptyStateProps) {
         ) : (
           <>
             {/* Generic welcome */}
-            <div className="text-6xl mb-6 opacity-60">
-              <span role="img" aria-label="chat icon">
-                💬
-              </span>
+            <div className="mb-6 flex justify-center opacity-60">
+              <MessageSquare
+                size={48}
+                className="text-[var(--luckin-text-secondary)]"
+              />
             </div>
-            <p className="text-lg font-medium">{t("chat.emptyState.title")}</p>
-            <p className="text-sm mt-2 opacity-80">
+            <p className="text-lg font-medium text-[var(--luckin-text-primary)]">
+              {t("chat.emptyState.title")}
+            </p>
+            <p className="text-sm mt-2 text-[var(--luckin-text-muted)]">
               {t("chat.emptyState.subtitle")}
             </p>
           </>

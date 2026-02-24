@@ -1,3 +1,14 @@
+import {
+  Settings,
+  Wrench,
+  CheckCircle,
+  Brain,
+  ListTodo,
+  Map,
+  CircleCheckBig,
+  LoaderCircle,
+  Circle,
+} from "lucide-react";
 import type {
   ChatMessage,
   SystemMessage,
@@ -9,6 +20,7 @@ import type {
   TodoItem,
   HooksMessage,
 } from "../types";
+import { useTranslation } from "../i18n";
 import { TimestampComponent } from "./TimestampComponent";
 import { MessageContainer } from "./messages/MessageContainer";
 import { CollapsibleDetails } from "./messages/CollapsibleDetails";
@@ -43,32 +55,42 @@ interface ChatMessageComponentProps {
 export function ChatMessageComponent({ message }: ChatMessageComponentProps) {
   const isUser = message.role === "user";
   const colorScheme = isUser
-    ? "bg-blue-600 text-white"
-    : "bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100";
+    ? "bubble-user bg-[var(--luckin-primary)] text-[var(--luckin-text-inverse)]"
+    : "bubble-assistant bg-[var(--luckin-surface)] border-l-[3px] border-[var(--luckin-primary)] shadow-luckin";
+
+  const animationStyle = isUser
+    ? { animation: "fadeSlideInRight 0.3s ease-out forwards" }
+    : { animation: "fadeSlideInLeft 0.3s ease-out forwards" };
 
   return (
     <MessageContainer
       alignment={isUser ? "right" : "left"}
       colorScheme={colorScheme}
     >
-      <div className="mb-2 flex items-center justify-between gap-4">
-        <div
-          className={`text-xs font-semibold opacity-90 ${
-            isUser ? "text-blue-100" : "text-slate-600 dark:text-slate-400"
-          }`}
-        >
-          {isUser ? "User" : "Claude"}
+      <div style={animationStyle}>
+        <div className="mb-2 flex items-center justify-between gap-4">
+          <div
+            className={`text-xs font-semibold opacity-90 ${
+              isUser
+                ? "text-[var(--luckin-text-inverse)]"
+                : "text-[var(--luckin-text-secondary)]"
+            }`}
+          >
+            {isUser ? "\u7528\u6237" : "Lucky"}
+          </div>
+          <TimestampComponent
+            timestamp={message.timestamp}
+            className={`text-xs opacity-70 ${
+              isUser
+                ? "text-[var(--luckin-text-inverse)]"
+                : "text-[var(--luckin-text-muted)]"
+            }`}
+          />
         </div>
-        <TimestampComponent
-          timestamp={message.timestamp}
-          className={`text-xs opacity-70 ${
-            isUser ? "text-blue-200" : "text-slate-500 dark:text-slate-500"
-          }`}
-        />
+        <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">
+          {message.content}
+        </pre>
       </div>
-      <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">
-        {message.content}
-      </pre>
     </MessageContainer>
   );
 }
@@ -127,12 +149,16 @@ export function SystemMessageComponent({
       label={getLabel()}
       details={details}
       badge={"subtype" in message ? message.subtype : undefined}
-      icon={<span className="bg-blue-400 dark:bg-blue-500">⚙</span>}
+      icon={
+        <span className="bg-[var(--luckin-primary)]">
+          <Settings size={10} color="white" />
+        </span>
+      }
       colorScheme={{
-        header: "text-blue-800 dark:text-blue-300",
-        content: "text-blue-700 dark:text-blue-300",
-        border: "border-blue-200 dark:border-blue-700",
-        bg: "bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800",
+        header: "text-[var(--luckin-primary)]",
+        content: "text-[var(--luckin-primary)]",
+        border: "border-[var(--luckin-primary)]/20",
+        bg: "bg-luckin-sky border border-[var(--luckin-primary)]/20",
       }}
     />
   );
@@ -146,11 +172,11 @@ export function ToolMessageComponent({ message }: ToolMessageComponentProps) {
   return (
     <MessageContainer
       alignment="left"
-      colorScheme="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100"
+      colorScheme="bg-[var(--luckin-success-bg)] text-[var(--luckin-success)]"
     >
-      <div className="text-xs font-semibold mb-2 opacity-90 text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
-        <div className="w-4 h-4 bg-emerald-500 dark:bg-emerald-600 rounded-full flex items-center justify-center text-white text-xs">
-          🔧
+      <div className="text-xs font-semibold mb-2 opacity-90 text-[var(--luckin-success)] flex items-center gap-2">
+        <div className="w-4 h-4 bg-[var(--luckin-success)] rounded-full flex items-center justify-center">
+          <Wrench size={10} color="white" />
         </div>
         {message.content}
       </div>
@@ -221,12 +247,16 @@ export function ToolResultMessageComponent({
       label={message.toolName}
       details={displayContent}
       badge={message.toolName === "Edit" ? undefined : message.summary}
-      icon={<span className="bg-emerald-400 dark:bg-emerald-500">✓</span>}
+      icon={
+        <span className="bg-[var(--luckin-success)]">
+          <CheckCircle size={10} color="white" />
+        </span>
+      }
       colorScheme={{
-        header: "text-emerald-800 dark:text-emerald-300",
-        content: "text-emerald-700 dark:text-emerald-300",
-        border: "border-emerald-200 dark:border-emerald-700",
-        bg: "bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800",
+        header: "text-[var(--luckin-success)]",
+        content: "text-[var(--luckin-success)]",
+        border: "border-[var(--luckin-success)]/20",
+        bg: "bg-[var(--luckin-success-bg)] border border-[var(--luckin-success)]/20",
       }}
       previewContent={previewContent}
       previewSummary={previewSummary}
@@ -245,27 +275,27 @@ export function PlanMessageComponent({ message }: PlanMessageComponentProps) {
   return (
     <MessageContainer
       alignment="left"
-      colorScheme="bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100"
+      colorScheme="bg-[var(--luckin-sky)] text-[var(--luckin-primary)]"
     >
       <div className="mb-3 flex items-center justify-between gap-4">
-        <div className="text-xs font-semibold opacity-90 text-blue-700 dark:text-blue-300 flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 dark:bg-blue-600 rounded-full flex items-center justify-center text-white text-xs">
-            📋
+        <div className="text-xs font-semibold opacity-90 text-[var(--luckin-primary)] flex items-center gap-2">
+          <div className="w-4 h-4 bg-[var(--luckin-primary)] rounded-full flex items-center justify-center">
+            <Map size={10} color="white" />
           </div>
           Ready to code?
         </div>
         <TimestampComponent
           timestamp={message.timestamp}
-          className="text-xs opacity-70 text-blue-600 dark:text-blue-400"
+          className="text-xs opacity-70 text-[var(--luckin-primary)]"
         />
       </div>
 
       <div className="mb-3">
-        <p className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-          Here is Claude's plan:
+        <p className="text-sm font-medium text-[var(--luckin-primary)] mb-2">
+          Here is Lucky's plan:
         </p>
-        <div className="bg-blue-100/50 dark:bg-blue-800/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
-          <pre className="text-sm text-blue-900 dark:text-blue-100 whitespace-pre-wrap font-mono leading-relaxed">
+        <div className="bg-[var(--luckin-primary)]/5 border border-[var(--luckin-primary)]/20 rounded-lg p-3">
+          <pre className="text-sm text-[var(--luckin-primary)] whitespace-pre-wrap font-mono leading-relaxed">
             {message.plan}
           </pre>
         </div>
@@ -283,15 +313,19 @@ export function ThinkingMessageComponent({
 }: ThinkingMessageComponentProps) {
   return (
     <CollapsibleDetails
-      label="Claude's Reasoning"
+      label="Lucky's Reasoning"
       details={message.content}
       badge="thinking"
-      icon={<span className="bg-purple-400 dark:bg-purple-500">💭</span>}
+      icon={
+        <span className="bg-[#3730A3]">
+          <Brain size={10} color="white" />
+        </span>
+      }
       colorScheme={{
-        header: "text-purple-700 dark:text-purple-300",
-        content: "text-purple-600 dark:text-purple-400 italic",
-        border: "border-purple-200 dark:border-purple-700",
-        bg: "bg-purple-50/60 dark:bg-purple-900/15 border border-purple-200 dark:border-purple-800",
+        header: "text-[#3730A3]",
+        content: "text-[#3730A3] italic",
+        border: "border-[#3730A3]/20",
+        bg: "bg-[#EEF2FF] border border-[#3730A3]/20",
       }}
       defaultExpanded={true}
     />
@@ -303,48 +337,70 @@ interface TodoMessageComponentProps {
 }
 
 export function TodoMessageComponent({ message }: TodoMessageComponentProps) {
+  const { t } = useTranslation();
   const getStatusIcon = (status: TodoItem["status"]) => {
     switch (status) {
       case "completed":
-        return { icon: "✅", label: "Completed" };
+        return {
+          icon: (
+            <CircleCheckBig
+              size={16}
+              className="text-[var(--luckin-success)]"
+            />
+          ),
+          label: "Completed",
+        };
       case "in_progress":
-        return { icon: "🔄", label: "In progress" };
+        return {
+          icon: (
+            <LoaderCircle
+              size={16}
+              className="text-[var(--luckin-primary)] animate-spin-slow"
+            />
+          ),
+          label: t("messages.inProgress"),
+        };
       case "pending":
       default:
-        return { icon: "⏳", label: "Pending" };
+        return {
+          icon: (
+            <Circle size={16} className="text-[var(--luckin-text-muted)]" />
+          ),
+          label: "Pending",
+        };
     }
   };
 
   const getStatusColor = (status: TodoItem["status"]) => {
     switch (status) {
       case "completed":
-        return "text-green-700 dark:text-green-400";
+        return "text-[var(--luckin-success)]";
       case "in_progress":
-        return "text-blue-700 dark:text-blue-400";
+        return "text-[var(--luckin-primary)]";
       case "pending":
       default:
-        return "text-gray-600 dark:text-gray-400";
+        return "text-[var(--luckin-text-muted)]";
     }
   };
 
   return (
     <MessageContainer
       alignment="left"
-      colorScheme="bg-amber-50 dark:bg-amber-900/20 text-amber-900 dark:text-amber-100"
+      colorScheme="bg-[var(--luckin-accent-light)] text-[#92600A]"
     >
       <div className="mb-3 flex items-center justify-between gap-4">
-        <div className="text-xs font-semibold opacity-90 text-amber-700 dark:text-amber-300 flex items-center gap-2">
+        <div className="text-xs font-semibold opacity-90 text-[#92600A] flex items-center gap-2">
           <div
-            className="w-4 h-4 bg-amber-500 dark:bg-amber-600 rounded-full flex items-center justify-center text-white text-xs"
+            className="w-4 h-4 bg-[var(--luckin-warning)] rounded-full flex items-center justify-center"
             aria-hidden="true"
           >
-            📋
+            <ListTodo size={10} color="white" />
           </div>
-          Todo List Updated
+          {t("messages.todoListUpdated")}
         </div>
         <TimestampComponent
           timestamp={message.timestamp}
-          className="text-xs opacity-70 text-amber-600 dark:text-amber-400"
+          className="text-xs opacity-70 text-[#92600A]"
         />
       </div>
 
@@ -354,7 +410,7 @@ export function TodoMessageComponent({ message }: TodoMessageComponentProps) {
           return (
             <div key={index} className="flex items-start gap-2">
               <span
-                className="text-sm flex-shrink-0 mt-0.5"
+                className="flex-shrink-0 mt-0.5"
                 aria-label={statusIcon.label}
               >
                 {statusIcon.icon}
@@ -364,7 +420,7 @@ export function TodoMessageComponent({ message }: TodoMessageComponentProps) {
                   {todo.content}
                 </div>
                 {todo.status === "in_progress" && (
-                  <div className="text-xs text-amber-600 dark:text-amber-500 italic">
+                  <div className="text-xs text-[#92600A]/70 italic">
                     {todo.activeForm}
                   </div>
                 )}
@@ -374,7 +430,7 @@ export function TodoMessageComponent({ message }: TodoMessageComponentProps) {
         })}
       </div>
 
-      <div className="mt-3 text-xs text-amber-700 dark:text-amber-400">
+      <div className="mt-3 text-xs text-[#92600A]/80">
         {message.todos.filter((t) => t.status === "completed").length} of{" "}
         {message.todos.length} completed
       </div>
@@ -386,14 +442,35 @@ export function LoadingComponent() {
   return (
     <MessageContainer
       alignment="left"
-      colorScheme="bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100"
+      colorScheme="bg-[var(--luckin-surface)] shadow-luckin"
     >
-      <div className="text-xs font-semibold mb-2 opacity-90 text-slate-600 dark:text-slate-400">
-        Claude
+      <div className="text-xs font-semibold mb-2 opacity-90 text-[var(--luckin-text-secondary)]">
+        Lucky
       </div>
-      <div className="flex items-center gap-2 text-sm">
-        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-        <span className="animate-pulse">Thinking...</span>
+      <div className="flex items-center gap-3 text-sm">
+        <div className="flex items-center gap-1">
+          <span
+            className="w-2 h-2 rounded-full bg-[var(--luckin-primary)]"
+            style={{ animation: "waveDots 1.2s ease-in-out infinite" }}
+          />
+          <span
+            className="w-2 h-2 rounded-full bg-[var(--luckin-primary)]"
+            style={{
+              animation: "waveDots 1.2s ease-in-out infinite",
+              animationDelay: "0.15s",
+            }}
+          />
+          <span
+            className="w-2 h-2 rounded-full bg-[var(--luckin-primary)]"
+            style={{
+              animation: "waveDots 1.2s ease-in-out infinite",
+              animationDelay: "0.3s",
+            }}
+          />
+        </div>
+        <span className="text-luckin-muted">
+          Lucky {"\u601D\u8003\u4E2D"}...
+        </span>
       </div>
     </MessageContainer>
   );

@@ -1,3 +1,5 @@
+import type { ComponentType, CSSProperties } from "react";
+
 export type DepartmentId =
   | "general"
   | "marketing"
@@ -9,7 +11,11 @@ export type DepartmentId =
 
 export interface Department {
   id: DepartmentId;
-  icon: string;
+  icon: ComponentType<{
+    className?: string;
+    size?: number;
+    style?: CSSProperties;
+  }>;
   color: string;
   bgClass: string;
 }

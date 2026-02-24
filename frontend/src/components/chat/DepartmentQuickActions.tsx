@@ -1,6 +1,5 @@
 import { useTranslation } from "../../i18n";
 import { useDepartment } from "../../contexts/DepartmentContext";
-import { departments } from "../../data/departments";
 import type { DepartmentId } from "../../types/department";
 
 interface DepartmentQuickActionsProps {
@@ -13,34 +12,34 @@ const quickActionPrompts: Record<
   [string, string, string]
 > = {
   marketing: [
-    "生成本月营销活动的ROI分析报告，包括各渠道的转化率和获客成本对比。",
-    "分析我们的客户数据，按购买频率和消费金额进行细分，识别高价值客户群体。",
-    "对比我们与主要竞争对手在定价、促销和市场定位方面的差异。",
+    "\u751F\u6210\u672C\u6708\u8425\u9500\u6D3B\u52A8\u7684ROI\u5206\u6790\u62A5\u544A\uFF0C\u5305\u62EC\u5404\u6E20\u9053\u7684\u8F6C\u5316\u7387\u548C\u83B7\u5BA2\u6210\u672C\u5BF9\u6BD4\u3002",
+    "\u5206\u6790\u6211\u4EEC\u7684\u5BA2\u6237\u6570\u636E\uFF0C\u6309\u8D2D\u4E70\u9891\u7387\u548C\u6D88\u8D39\u91D1\u989D\u8FDB\u884C\u7EC6\u5206\uFF0C\u8BC6\u522B\u9AD8\u4EF7\u503C\u5BA2\u6237\u7FA4\u4F53\u3002",
+    "\u5BF9\u6BD4\u6211\u4EEC\u4E0E\u4E3B\u8981\u7ADE\u4E89\u5BF9\u624B\u5728\u5B9A\u4EF7\u3001\u4FC3\u9500\u548C\u5E02\u573A\u5B9A\u4F4D\u65B9\u9762\u7684\u5DEE\u5F02\u3002",
   ],
   accounting: [
-    "生成本月的财务报表，包括营收、成本和利润的详细分析。",
-    "分析本季度的费用支出，识别超出预算的项目并提供优化建议。",
-    "查询当前的现金流状况，包括应收账款和应付账款的详细信息。",
+    "\u751F\u6210\u672C\u6708\u7684\u8D22\u52A1\u62A5\u8868\uFF0C\u5305\u62EC\u8425\u6536\u3001\u6210\u672C\u548C\u5229\u6DA6\u7684\u8BE6\u7EC6\u5206\u6790\u3002",
+    "\u5206\u6790\u672C\u5B63\u5EA6\u7684\u8D39\u7528\u652F\u51FA\uFF0C\u8BC6\u522B\u8D85\u51FA\u9884\u7B97\u7684\u9879\u76EE\u5E76\u63D0\u4F9B\u4F18\u5316\u5EFA\u8BAE\u3002",
+    "\u67E5\u8BE2\u5F53\u524D\u7684\u73B0\u91D1\u6D41\u72B6\u51B5\uFF0C\u5305\u62EC\u5E94\u6536\u8D26\u6B3E\u548C\u5E94\u4ED8\u8D26\u6B3E\u7684\u8BE6\u7EC6\u4FE1\u606F\u3002",
   ],
   devops: [
-    "检查所有系统的当前状态，包括CPU、内存、磁盘使用率和服务健康状况。",
-    "分析过去24小时的系统日志，识别错误和异常模式。",
-    "分析各服务的性能指标，识别瓶颈并提供优化建议。",
+    "\u68C0\u67E5\u6240\u6709\u7CFB\u7EDF\u7684\u5F53\u524D\u72B6\u6001\uFF0C\u5305\u62ECCPU\u3001\u5185\u5B58\u3001\u78C1\u76D8\u4F7F\u7528\u7387\u548C\u670D\u52A1\u5065\u5EB7\u72B6\u51B5\u3002",
+    "\u5206\u6790\u8FC7\u53BB24\u5C0F\u65F6\u7684\u7CFB\u7EDF\u65E5\u5FD7\uFF0C\u8BC6\u522B\u9519\u8BEF\u548C\u5F02\u5E38\u6A21\u5F0F\u3002",
+    "\u5206\u6790\u5404\u670D\u52A1\u7684\u6027\u80FD\u6307\u6807\uFF0C\u8BC6\u522B\u74F6\u9888\u5E76\u63D0\u4F9B\u4F18\u5316\u5EFA\u8BAE\u3002",
   ],
   product: [
-    "分析用户行为数据，包括活跃用户数、留存率和使用时长趋势。",
-    "展示各功能的使用情况，识别最受欢迎和使用率低的功能。",
-    "汇总最近的用户反馈和评价，按主题分类并识别改进机会。",
+    "\u5206\u6790\u7528\u6237\u884C\u4E3A\u6570\u636E\uFF0C\u5305\u62EC\u6D3B\u8DC3\u7528\u6237\u6570\u3001\u7559\u5B58\u7387\u548C\u4F7F\u7528\u65F6\u957F\u8D8B\u52BF\u3002",
+    "\u5C55\u793A\u5404\u529F\u80FD\u7684\u4F7F\u7528\u60C5\u51B5\uFF0C\u8BC6\u522B\u6700\u53D7\u6B22\u8FCE\u548C\u4F7F\u7528\u7387\u4F4E\u7684\u529F\u80FD\u3002",
+    "\u6C47\u603B\u6700\u8FD1\u7684\u7528\u6237\u53CD\u9988\u548C\u8BC4\u4EF7\uFF0C\u6309\u4E3B\u9898\u5206\u7C7B\u5E76\u8BC6\u522B\u6539\u8FDB\u673A\u4F1A\u3002",
   ],
   supplyChain: [
-    "查询当前各仓库的库存水平，标记低于安全库存的商品。",
-    "评估主要供应商的绩效，包括交货准时率、质量和成本趋势。",
-    "追踪当前在途订单的物流状态，识别可能延迟的配送。",
+    "\u67E5\u8BE2\u5F53\u524D\u5404\u4ED3\u5E93\u7684\u5E93\u5B58\u6C34\u5E73\uFF0C\u6807\u8BB0\u4F4E\u4E8E\u5B89\u5168\u5E93\u5B58\u7684\u5546\u54C1\u3002",
+    "\u8BC4\u4F30\u4E3B\u8981\u4F9B\u5E94\u5546\u7684\u7EE9\u6548\uFF0C\u5305\u62EC\u4EA4\u8D27\u51C6\u65F6\u7387\u3001\u8D28\u91CF\u548C\u6210\u672C\u8D8B\u52BF\u3002",
+    "\u8FFD\u8E2A\u5F53\u524D\u5728\u9014\u8BA2\u5355\u7684\u7269\u6D41\u72B6\u6001\uFF0C\u8BC6\u522B\u53EF\u80FD\u5EF6\u8FDF\u7684\u914D\u9001\u3002",
   ],
   executive: [
-    "生成公司整体业绩总览，包括营收、利润和关键业务指标。",
-    "展示各部门的KPI完成情况，标注超额完成和未达标的指标。",
-    "评估当前面临的主要风险，包括运营、财务和市场风险。",
+    "\u751F\u6210\u516C\u53F8\u6574\u4F53\u4E1A\u7EE9\u603B\u89C8\uFF0C\u5305\u62EC\u8425\u6536\u3001\u5229\u6DA6\u548C\u5173\u952E\u4E1A\u52A1\u6307\u6807\u3002",
+    "\u5C55\u793A\u5404\u90E8\u95E8\u7684KPI\u5B8C\u6210\u60C5\u51B5\uFF0C\u6807\u6CE8\u8D85\u989D\u5B8C\u6210\u548C\u672A\u8FBE\u6807\u7684\u6307\u6807\u3002",
+    "\u8BC4\u4F30\u5F53\u524D\u9762\u4E34\u7684\u4E3B\u8981\u98CE\u9669\uFF0C\u5305\u62EC\u8FD0\u8425\u3001\u8D22\u52A1\u548C\u5E02\u573A\u98CE\u9669\u3002",
   ],
 };
 
@@ -55,7 +54,6 @@ export function DepartmentQuickActions({
     return null;
   }
 
-  const currentDept = departments[department];
   const prompts = quickActionPrompts[department];
 
   const actions = [
@@ -70,12 +68,7 @@ export function DepartmentQuickActions({
         <button
           key={key}
           onClick={() => onActionClick(prompt)}
-          className="px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
-          style={{
-            backgroundColor: `${currentDept.color}15`,
-            color: currentDept.color,
-            border: `1px solid ${currentDept.color}30`,
-          }}
+          className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-luckin-sky text-[var(--luckin-primary)] border border-transparent hover:bg-[var(--luckin-primary)] hover:text-[var(--luckin-text-inverse)] hover:shadow-md hover:scale-105"
         >
           {t(`quickActions.${department}.${key}`)}
         </button>

@@ -1,6 +1,7 @@
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { AlertTriangle } from "lucide-react";
 import type { JSX } from "react";
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "../../i18n";
 
 // Helper function to extract command name from pattern like "Bash(ls:*)" -> "ls"
 function extractCommandName(pattern: string): string {
@@ -10,13 +11,15 @@ function extractCommandName(pattern: string): string {
 }
 
 // Helper function to render permission content based on patterns
-function renderPermissionContent(patterns: string[]): JSX.Element {
+function renderPermissionContent(
+  patterns: string[],
+  t: (key: string, params?: Record<string, string | number>) => string,
+): JSX.Element {
   // Handle empty patterns array
   if (patterns.length === 0) {
     return (
-      <p className="text-slate-600 dark:text-slate-300 mb-3">
-        Claude wants to use bash commands, but the specific commands could not
-        be determined.
+      <p className="text-[var(--luckin-text-secondary)] mb-3">
+        {t("permission.luckyWantsBash")}
       </p>
     );
   }
@@ -29,14 +32,14 @@ function renderPermissionContent(patterns: string[]): JSX.Element {
 
     return (
       <>
-        <p className="text-slate-600 dark:text-slate-300 mb-2">
-          Claude wants to use the following commands:
+        <p className="text-[var(--luckin-text-secondary)] mb-2">
+          {t("permission.luckyWantsCommands")}
         </p>
         <div className="flex flex-wrap gap-2 mb-3">
           {commandNames.map((cmd, index) => (
             <span
               key={index}
-              className="font-mono bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-sm"
+              className="font-mono bg-[var(--luckin-bg)] px-2 py-1 rounded text-sm"
             >
               {cmd}
             </span>
@@ -47,31 +50,36 @@ function renderPermissionContent(patterns: string[]): JSX.Element {
   } else {
     const commandName = extractCommandName(patterns[0]);
     return (
-      <p className="text-slate-600 dark:text-slate-300 mb-3">
-        Claude wants to use the{" "}
-        <span className="font-mono bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-sm">
+      <p className="text-[var(--luckin-text-secondary)] mb-3">
+        {t("permission.luckyWantsCommand")}{" "}
+        <span className="font-mono bg-[var(--luckin-bg)] px-2 py-1 rounded text-sm">
           {commandName}
         </span>{" "}
-        command.
+        {t("permission.commandSuffix")}
       </p>
     );
   }
 }
 
 // Helper function to render button text for permanent permission
-function renderPermanentButtonText(patterns: string[]): string {
+function renderPermanentButtonText(
+  patterns: string[],
+  t: (key: string, params?: Record<string, string | number>) => string,
+): string {
   // Handle empty patterns array
   if (patterns.length === 0) {
-    return "Yes, and don't ask again for bash commands";
+    return t("permission.yesDontAskBash");
   }
 
   const isMultipleCommands = patterns.length > 1;
   const commandNames = patterns.map(extractCommandName);
 
   if (isMultipleCommands) {
-    return `Yes, and don't ask again for ${commandNames.join(" and ")} commands`;
+    return t("permission.yesDontAskMultiple", {
+      commands: commandNames.join(" & "),
+    });
   } else {
-    return `Yes, and don't ask again for ${commandNames[0]} command`;
+    return t("permission.yesDontAskSingle", { command: commandNames[0] });
   }
 }
 
@@ -100,6 +108,7 @@ export function PermissionInputPanel({
   onSelectionChange, // Optional callback for demo automation
   externalSelectedOption, // Optional external control for demo automation
 }: PermissionInputPanelProps) {
+  const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState<
     "allow" | "allowPermanent" | "deny" | null
   >("allow");
@@ -169,22 +178,22 @@ export function PermissionInputPanel({
   ]);
 
   return (
-    <div className="flex-shrink-0 px-4 py-4 bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl backdrop-blur-sm shadow-sm">
+    <div className="flex-shrink-0 px-4 py-4 bg-[var(--luckin-surface)] border border-[var(--luckin-border)] rounded-xl shadow-sm">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-amber-100 dark:bg-amber-900/20 rounded-lg">
-          <ExclamationTriangleIcon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+        <div className="p-2 bg-[var(--luckin-warning-bg)] rounded-lg">
+          <AlertTriangle className="w-5 h-5 text-[var(--luckin-warning)]" />
         </div>
-        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-          Permission Required
+        <h3 className="text-lg font-semibold text-[var(--luckin-text-primary)]">
+          {t("permission.title")}
         </h3>
       </div>
 
       {/* Content */}
       <div className="mb-4">
-        {renderPermissionContent(patterns)}
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          Do you want to proceed? (Press ESC to deny)
+        {renderPermissionContent(patterns, t)}
+        <p className="text-sm text-[var(--luckin-text-muted)]">
+          {t("permission.proceed")}
         </p>
       </div>
 
@@ -211,7 +220,7 @@ export function PermissionInputPanel({
             "allow",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "allow"
-                ? "bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-500 dark:border-blue-400 shadow-sm"
+                ? "bg-luckin-sky border-2 border-[var(--luckin-primary)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -219,11 +228,11 @@ export function PermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "allow"
-                ? "text-blue-700 dark:text-blue-300"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-primary)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            Yes
+            {t("permission.yes")}
           </span>
         </button>
 
@@ -248,7 +257,7 @@ export function PermissionInputPanel({
             "allowPermanent",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "allowPermanent"
-                ? "bg-green-50 dark:bg-green-900/20 border-2 border-green-500 dark:border-green-400 shadow-sm"
+                ? "bg-[var(--luckin-success-bg)] border-2 border-[var(--luckin-success)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -256,11 +265,11 @@ export function PermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "allowPermanent"
-                ? "text-green-700 dark:text-green-300"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-success)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            {renderPermanentButtonText(patterns)}
+            {renderPermanentButtonText(patterns, t)}
           </span>
         </button>
 
@@ -285,7 +294,7 @@ export function PermissionInputPanel({
             "deny",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "deny"
-                ? "bg-slate-50 dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-500 shadow-sm"
+                ? "bg-[var(--luckin-bg)] border-2 border-[var(--luckin-text-muted)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -293,11 +302,11 @@ export function PermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "deny"
-                ? "text-slate-800 dark:text-slate-200"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-text-primary)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            No
+            {t("permission.no")}
           </span>
         </button>
       </div>

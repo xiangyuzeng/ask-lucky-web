@@ -226,9 +226,9 @@ export function DemoPage() {
           // Demo focus state (subtle addition to normal styles)
           if (isActive) {
             if (buttonType === "allowPermanent") {
-              return `${defaultClassName} ring-1 ring-green-300`;
+              return `${defaultClassName} ring-1 ring-[var(--luckin-success)]`;
             } else if (buttonType === "allow") {
-              return `${defaultClassName} ring-1 ring-blue-300`;
+              return `${defaultClassName} ring-1 ring-[var(--luckin-info)]`;
             }
           }
 
@@ -350,7 +350,7 @@ export function DemoPage() {
 
   return (
     <div
-      className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+      className="min-h-screen bg-[var(--luckin-bg)] transition-colors duration-300"
       data-demo-active={isDemo}
       data-demo-completed={isCompleted}
       data-demo-step={currentStep}
@@ -359,15 +359,15 @@ export function DemoPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-4 sm:mb-8 flex-shrink-0">
           <div>
-            <h1 className="text-slate-800 dark:text-slate-100 text-lg sm:text-3xl font-bold tracking-tight">
+            <h1 className="text-[var(--luckin-text-primary)] text-lg sm:text-3xl font-bold tracking-tight">
               Claude Code Web UI
               {isDemo && (
-                <span className="ml-3 text-lg font-normal text-slate-600 dark:text-slate-400">
+                <span className="ml-3 text-lg font-normal text-[var(--luckin-text-secondary)]">
                   (Demo)
                 </span>
               )}
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm font-mono mt-1">
+            <p className="text-[var(--luckin-text-secondary)] text-sm font-mono mt-1">
               {demoWorkingDirectory}
             </p>
           </div>
@@ -376,9 +376,9 @@ export function DemoPage() {
 
         {/* Demo Controls (only shown with ?control=true) */}
         {showControls && (
-          <div className="mb-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600">
+          <div className="mb-4 p-4 bg-[var(--luckin-sky)] rounded-lg border-2 border-dashed border-[var(--luckin-border)]">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-slate-600 dark:text-slate-400">
+              <div className="text-sm text-[var(--luckin-text-secondary)]">
                 Demo Controls - Scenario: {selectedScenario} | Step:{" "}
                 {currentStep} | Status:{" "}
                 {isCompleted
@@ -395,14 +395,14 @@ export function DemoPage() {
                     {isPaused ? (
                       <button
                         onClick={resumeDemo}
-                        className="px-3 py-1 text-xs bg-green-200 dark:bg-green-700 text-green-700 dark:text-green-300 rounded hover:bg-green-300 dark:hover:bg-green-600"
+                        className="px-3 py-1 text-xs bg-[var(--luckin-success-bg)] text-[var(--luckin-success)] rounded hover:opacity-80"
                       >
                         Resume
                       </button>
                     ) : (
                       <button
                         onClick={pauseDemo}
-                        className="px-3 py-1 text-xs bg-yellow-200 dark:bg-yellow-700 text-yellow-700 dark:text-yellow-300 rounded hover:bg-yellow-300 dark:hover:bg-yellow-600"
+                        className="px-3 py-1 text-xs bg-[var(--luckin-warning-bg)] text-[var(--luckin-warning)] rounded hover:opacity-80"
                       >
                         Pause
                       </button>
@@ -411,14 +411,14 @@ export function DemoPage() {
                 )}
                 <button
                   onClick={resetDemo}
-                  className="px-3 py-1 text-xs bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded hover:bg-slate-300 dark:hover:bg-slate-600"
+                  className="px-3 py-1 text-xs bg-[var(--luckin-bg)] text-[var(--luckin-text-secondary)] rounded hover:opacity-80"
                 >
                   Reset Demo
                 </button>
                 {isCompleted && (
                   <button
                     onClick={startDemo}
-                    className="px-3 py-1 text-xs bg-blue-200 dark:bg-blue-700 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-300 dark:hover:bg-blue-600"
+                    className="px-3 py-1 text-xs bg-[var(--luckin-info-bg)] text-[var(--luckin-info)] rounded hover:opacity-80"
                   >
                     Restart
                   </button>

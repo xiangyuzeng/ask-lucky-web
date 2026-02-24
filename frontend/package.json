@@ -21,8 +21,8 @@
     "capture-screenshots": "npx tsx scripts/capture-screenshots.ts"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
     "dayjs": "^1.11.13",
+    "lucide-react": "^0.575.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.6.2"

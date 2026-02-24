@@ -1,17 +1,19 @@
 {
   "app": {
-    "title": "瑞幸运营控制台",
-    "subtitle": "内部运营助手"
+    "title": "Ask Lucky",
+    "subtitle": "瑞幸智能运营助手"
   },
   "welcome": {
-    "greeting": "欢迎使用瑞幸运营控制台",
+    "greeting": "欢迎使用 Ask Lucky",
     "subtitle": "选择您的部门，开始使用AI智能助手",
-    "selectDepartment": "选择部门"
+    "selectDepartment": "选择部门",
+    "poweredBy": "由 AI 驱动",
+    "footer": "瑞幸咖啡北美 · 仅限内部使用"
   },
   "departments": {
     "general": {
       "name": "通用",
-      "description": "通用咨询和帮助"
+      "description": "通用查询和助手服务"
     },
     "marketing": {
       "name": "市场营销",
@@ -40,7 +42,7 @@
   },
   "sidebar": {
     "conversations": "对话记录",
-    "templates": "模板",
+    "templates": "提示模板",
     "pinned": "已固定",
     "search": "搜索对话...",
     "newChat": "新对话",
@@ -50,7 +52,8 @@
   "navigation": {
     "newConversation": "新建对话",
     "backToPrevious": "返回上一个",
-    "home": "首页"
+    "home": "首页",
+    "toggleSidebar": "切换侧边栏"
   },
   "quickActions": {
     "marketing": {
@@ -85,13 +88,16 @@
     }
   },
   "chat": {
-    "placeholder": "询问任何关于您部门的问题...",
+    "placeholder": "向 Lucky 提问...",
     "send": "发送",
+    "plan": "规划",
     "stop": "停止",
     "thinking": "思考中...",
     "characterCount": "{{count}} / {{max}} 字符",
+    "user": "用户",
+    "assistant": "Lucky",
     "emptyState": {
-      "title": "开始与Claude对话",
+      "title": "开始与 Lucky 对话",
       "subtitle": "在下方输入您的问题"
     }
   },
@@ -116,19 +122,24 @@
   },
   "settings": {
     "title": "设置",
-    "theme": "主题",
-    "light": "浅色",
-    "dark": "深色",
-    "system": "跟随系统",
-    "language": "语言"
+    "enterBehavior": "回车键行为",
+    "enterToSend": "回车发送",
+    "enterToNewline": "回车换行",
+    "general": "通用设置",
+    "enterKeyBehavior": "回车键行为",
+    "enterToSendDesc": "回车发送消息，Shift+回车换行",
+    "enterToNewlineDesc": "回车换行，Shift+回车发送消息",
+    "enterBehaviorHelp": "控制在聊天输入框中回车键的行为。",
+    "srSend": "回车键发送消息",
+    "srNewline": "回车键换行",
+    "closeSettings": "关闭设置"
   },
   "shortcuts": {
     "title": "键盘快捷键",
     "focusInput": "聚焦输入框",
     "newChat": "新建对话",
     "export": "打开导出菜单",
-    "help": "显示快捷键",
-    "toggleLanguage": "切换语言"
+    "help": "显示快捷键"
   },
   "toast": {
     "copied": "已复制到剪贴板",
@@ -142,5 +153,44 @@
     "close": "关闭",
     "loading": "加载中...",
     "retry": "重试"
+  },
+  "projectSelector": {
+    "title": "选择项目",
+    "recentProjects": "最近的项目",
+    "loading": "加载项目中...",
+    "error": "错误：{{error}}",
+    "searchPlaceholder": "搜索项目..."
+  },
+  "permission": {
+    "title": "需要权限",
+    "proceed": "是否继续？（按 ESC 拒绝）",
+    "yes": "是",
+    "no": "否",
+    "luckyWantsBash": "Lucky 想要使用 bash 命令，但无法确定具体命令。",
+    "luckyWantsCommands": "Lucky 想要使用以下命令：",
+    "luckyWantsCommand": "Lucky 想要使用",
+    "commandSuffix": "命令。",
+    "yesDontAskBash": "是，且不再询问 bash 命令",
+    "yesDontAskMultiple": "是，且不再询问 {{commands}} 命令",
+    "yesDontAskSingle": "是，且不再询问 {{command}} 命令"
+  },
+  "planPermission": {
+    "chooseHowToProceed": "选择如何继续（按 ESC 继续规划）",
+    "acceptWithEdits": "是，自动接受编辑",
+    "acceptDefault": "是，手动审批编辑",
+    "keepPlanning": "否，继续规划"
+  },
+  "history": {
+    "loadingProject": "加载项目中...",
+    "loadingConversations": "加载对话中...",
+    "errorTitle": "加载历史记录失败",
+    "noConversationsTitle": "暂无对话",
+    "noConversationsDesc": "开始对话后，您的聊天记录将显示在此处。",
+    "session": "会话",
+    "messages": "条消息"
+  },
+  "messages": {
+    "inProgress": "进行中",
+    "todoListUpdated": "待办事项已更新"
   }
 }

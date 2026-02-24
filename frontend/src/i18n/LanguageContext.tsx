@@ -38,8 +38,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (stored === "en" || stored === "zh") {
       return stored;
     }
-    const browserLang = navigator.language.toLowerCase();
-    return browserLang.startsWith("zh") ? "zh" : "en";
+    return "zh";
   });
 
   useEffect(() => {

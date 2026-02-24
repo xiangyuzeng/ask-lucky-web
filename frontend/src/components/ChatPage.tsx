@@ -13,7 +13,6 @@ import { usePermissions } from "../hooks/chat/usePermissions";
 import { usePermissionMode } from "../hooks/chat/usePermissionMode";
 import { useAbortController } from "../hooks/chat/useAbortController";
 import { useAutoHistoryLoader } from "../hooks/useHistoryLoader";
-import { SettingsModal } from "./SettingsModal";
 import { ChatInput } from "./chat/ChatInput";
 import { ChatMessages } from "./chat/ChatMessages";
 import { HistoryView } from "./HistoryView";
@@ -32,7 +31,6 @@ export function ChatPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [projects, setProjects] = useState<ProjectInfo[]>([]);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [isLoadingConversations, setIsLoadingConversations] = useState(false);
@@ -390,13 +388,9 @@ export function ChatPage() {
     navigate({ search: searchParams.toString() });
   }, [navigate]);
 
-  const handleSettingsClick = useCallback(() => {
-    setIsSettingsOpen(true);
-  }, []);
-
-  const handleSettingsClose = useCallback(() => {
-    setIsSettingsOpen(false);
-  }, []);
+  const handleHomeClick = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
 
   const handleToggleSidebar = useCallback(() => {
     setIsSidebarOpen((prev) => !prev);
@@ -522,8 +516,8 @@ export function ChatPage() {
       <AppHeader
         onToggleSidebar={handleToggleSidebar}
         onHistoryClick={handleHistoryClick}
-        onSettingsClick={handleSettingsClick}
         onLogoClick={handleLogoClick}
+        onHomeClick={handleHomeClick}
         onNewConversation={
           hasSelectedDepartment ? handleNewConversation : undefined
         }
@@ -664,9 +658,6 @@ export function ChatPage() {
           </div>
         </main>
       </div>
-
-      {/* Settings Modal */}
-      <SettingsModal isOpen={isSettingsOpen} onClose={handleSettingsClose} />
     </div>
   );
 }

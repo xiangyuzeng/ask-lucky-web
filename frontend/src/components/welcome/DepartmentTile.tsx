@@ -5,38 +5,69 @@ import { useTranslation } from "../../i18n";
 interface DepartmentTileProps {
   departmentId: DepartmentId;
   onClick: (departmentId: DepartmentId) => void;
+  index?: number;
 }
 
-export function DepartmentTile({ departmentId, onClick }: DepartmentTileProps) {
+export function DepartmentTile({
+  departmentId,
+  onClick,
+  index = 0,
+}: DepartmentTileProps) {
   const { t } = useTranslation();
   const dept = departments[departmentId];
+  const IconComponent = dept.icon;
 
   return (
     <button
       onClick={() => onClick(departmentId)}
       className={`
-        group relative p-6 rounded-xl
-        bg-luckin-surface border border-luckin
-        hover:border-[var(--luckin-primary)] hover:shadow-luckin-md
-        transition-luckin cursor-pointer
+        group relative p-6
+        glass-luckin rounded-[var(--luckin-radius-2xl)]
+        hover-lift press-effect
+        cursor-pointer
         flex flex-col items-center text-center
         focus-luckin
+        animate-fade-slide-up
       `}
-      style={{ "--dept-accent": dept.color } as React.CSSProperties}
+      style={
+        {
+          animationDelay: `${index * 80}ms`,
+          opacity: 0,
+          "--dept-accent": dept.color,
+        } as React.CSSProperties
+      }
     >
-      <span className="text-4xl mb-3" role="img" aria-hidden="true">
-        {dept.icon}
-      </span>
-      <h3 className="font-semibold text-luckin-primary mb-1">
+      {/* Top gradient border line */}
+      <div
+        className="absolute top-0 left-4 right-4 h-[3px] rounded-full"
+        style={{
+          background: `linear-gradient(90deg, ${dept.color}, ${dept.color}88)`,
+        }}
+      />
+
+      {/* Icon badge */}
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform duration-200 group-hover:scale-110"
+        style={{
+          background: `${dept.color}26`,
+        }}
+      >
+        <IconComponent
+          className="transition-colors duration-200"
+          style={{ color: dept.color }}
+          size={24}
+        />
+      </div>
+
+      {/* Department name */}
+      <h3 className="font-semibold text-[var(--luckin-text-primary)] mb-1">
         {t(`departments.${departmentId}.name`)}
       </h3>
+
+      {/* Department description */}
       <p className="text-sm text-luckin-muted line-clamp-2">
         {t(`departments.${departmentId}.description`)}
       </p>
-      <div
-        className="absolute bottom-0 left-0 right-0 h-1 rounded-b-xl opacity-0 group-hover:opacity-100 transition-luckin"
-        style={{ backgroundColor: dept.color }}
-      />
     </button>
   );
 }

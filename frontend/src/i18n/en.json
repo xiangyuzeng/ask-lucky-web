@@ -1,12 +1,14 @@
 {
   "app": {
-    "title": "Luckin Ops Console",
-    "subtitle": "Internal Operations Assistant"
+    "title": "Ask Lucky",
+    "subtitle": "Luckin Smart Operations Assistant"
   },
   "welcome": {
     "greeting": "Welcome to Luckin Ops Console",
     "subtitle": "Select your department to get started with AI-powered assistance",
-    "selectDepartment": "Select a department"
+    "selectDepartment": "Select a department",
+    "poweredBy": "Powered by AI",
+    "footer": "Luckin Coffee North America · Internal Use Only"
   },
   "departments": {
     "general": {
@@ -50,7 +52,8 @@
   "navigation": {
     "newConversation": "New Conversation",
     "backToPrevious": "Back to Previous",
-    "home": "Home"
+    "home": "Home",
+    "toggleSidebar": "Toggle sidebar"
   },
   "quickActions": {
     "marketing": {
@@ -90,8 +93,10 @@
     "stop": "Stop",
     "thinking": "Thinking...",
     "characterCount": "{{count}} / {{max}} characters",
+    "user": "User",
+    "assistant": "Lucky",
     "emptyState": {
-      "title": "Start a conversation with Claude",
+      "title": "Start a conversation with Lucky",
       "subtitle": "Type your message below to begin"
     }
   },
@@ -120,7 +125,18 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "language": "Language"
+    "language": "Language",
+    "general": "General Settings",
+    "enterBehavior": "Enter Key Behavior",
+    "enterKeyBehavior": "Enter Key Behavior",
+    "enterToSend": "Enter to Send",
+    "enterToNewline": "Enter for Newline",
+    "enterToSendDesc": "Enter sends message, Shift+Enter for newline",
+    "enterToNewlineDesc": "Enter adds newline, Shift+Enter sends message",
+    "enterBehaviorHelp": "Controls how the Enter key behaves when typing messages in the chat input.",
+    "srSend": "Enter key sends messages",
+    "srNewline": "Enter key creates newlines",
+    "closeSettings": "Close settings"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
@@ -142,5 +158,44 @@
     "close": "Close",
     "loading": "Loading...",
     "retry": "Retry"
+  },
+  "projectSelector": {
+    "title": "Select a Project",
+    "recentProjects": "Recent Projects",
+    "loading": "Loading projects...",
+    "error": "Error: {{error}}",
+    "searchPlaceholder": "Search projects..."
+  },
+  "permission": {
+    "title": "Permission Required",
+    "proceed": "Do you want to proceed? (Press ESC to deny)",
+    "yes": "Yes",
+    "no": "No",
+    "luckyWantsBash": "Lucky wants to use bash commands, but the specific commands could not be determined.",
+    "luckyWantsCommands": "Lucky wants to use the following commands:",
+    "luckyWantsCommand": "Lucky wants to use the",
+    "commandSuffix": "command.",
+    "yesDontAskBash": "Yes, and don't ask again for bash commands",
+    "yesDontAskMultiple": "Yes, and don't ask again for {{commands}} commands",
+    "yesDontAskSingle": "Yes, and don't ask again for {{command}} command"
+  },
+  "planPermission": {
+    "chooseHowToProceed": "Choose how to proceed (Press ESC to keep planning)",
+    "acceptWithEdits": "Yes, and auto-accept edits",
+    "acceptDefault": "Yes, and manually approve edits",
+    "keepPlanning": "No, keep planning"
+  },
+  "history": {
+    "loadingProject": "Loading project...",
+    "loadingConversations": "Loading conversations...",
+    "errorTitle": "Error Loading History",
+    "noConversationsTitle": "No Conversations Yet",
+    "noConversationsDesc": "Start chatting to see your conversation history here.",
+    "session": "Session",
+    "messages": "messages"
+  },
+  "messages": {
+    "inProgress": "In progress",
+    "todoListUpdated": "Todo List Updated"
   }
 }

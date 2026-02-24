@@ -42,9 +42,9 @@ export function DemoPermissionInputWrapper({
     // Demo focus state (subtle addition to normal styles)
     if (isActive) {
       if (buttonType === "allowPermanent") {
-        return `${defaultClassName} ring-1 ring-green-300`;
+        return `${defaultClassName} ring-1 ring-[var(--luckin-success)]`;
       } else if (buttonType === "allow") {
-        return `${defaultClassName} ring-1 ring-blue-300`;
+        return `${defaultClassName} ring-1 ring-[var(--luckin-primary-lighter)]`;
       }
     }
 

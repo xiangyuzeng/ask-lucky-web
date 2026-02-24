@@ -1,17 +1,16 @@
+import { PanelLeft, Plus, Home } from "lucide-react";
 import { DepartmentSelector } from "../sidebar/DepartmentSelector";
-import { LanguageToggle } from "../sidebar/LanguageToggle";
 import { useTranslation } from "../../i18n";
-import { ThemeToggle } from "../common/ThemeToggle";
 import { HistoryButton } from "../chat/HistoryButton";
-import { SettingsButton } from "../SettingsButton";
 import { useDepartment } from "../../contexts/DepartmentContext";
 import { departments } from "../../data/departments";
+import { LuckinLogo } from "../common/LuckinLogo";
 
 interface AppHeaderProps {
   onToggleSidebar?: () => void;
   onHistoryClick?: () => void;
-  onSettingsClick?: () => void;
   onLogoClick?: () => void;
+  onHomeClick?: () => void;
   onNewConversation?: () => void;
   showSidebarToggle?: boolean;
   showDepartmentBadge?: boolean;
@@ -20,8 +19,8 @@ interface AppHeaderProps {
 export function AppHeader({
   onToggleSidebar,
   onHistoryClick,
-  onSettingsClick,
   onLogoClick,
+  onHomeClick,
   onNewConversation,
   showSidebarToggle = true,
   showDepartmentBadge = true,
@@ -31,36 +30,35 @@ export function AppHeader({
 
   const currentDept = departments[department];
   const showBadge = showDepartmentBadge && department !== "general";
+  const DeptIcon = currentDept.icon;
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 bg-luckin-surface border-b border-luckin">
+    <header className="header-frosted relative flex items-center justify-between px-4 py-3">
+      {/* Gradient bottom border */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, var(--luckin-primary), transparent)",
+        }}
+      />
+
       <div className="flex items-center gap-3">
         {showSidebarToggle && (
           <button
             onClick={onToggleSidebar}
             className="p-2 rounded-lg hover:bg-luckin-sky transition-luckin focus-luckin"
-            aria-label="Toggle sidebar"
+            aria-label={t("navigation.toggleSidebar")}
           >
-            <svg
-              className="w-5 h-5 text-luckin-secondary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <PanelLeft size={20} className="text-luckin-secondary" />
           </button>
         )}
         <button
           onClick={onLogoClick}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
-          aria-label={t("navigation.home")}
+          aria-label={t("app.title")}
         >
+          <LuckinLogo size={24} />
           <span className="font-semibold text-luckin-primary">
             {t("app.title")}
           </span>
@@ -76,7 +74,7 @@ export function AppHeader({
               border: `1px solid ${currentDept.color}30`,
             }}
           >
-            <span>{currentDept.icon}</span>
+            <DeptIcon size={14} />
             <span className="hidden sm:inline">
               {t(`departments.${department}.name`)}
             </span>
@@ -85,6 +83,17 @@ export function AppHeader({
       </div>
 
       <div className="flex items-center gap-2">
+        {/* Home Button */}
+        {onHomeClick && (
+          <button
+            onClick={onHomeClick}
+            className="p-2 rounded-lg hover:bg-luckin-sky transition-luckin focus-luckin"
+            aria-label={t("navigation.home")}
+            title={t("navigation.home")}
+          >
+            <Home size={20} className="text-luckin-secondary" />
+          </button>
+        )}
         {/* New Conversation Button */}
         {onNewConversation && (
           <button
@@ -93,26 +102,11 @@ export function AppHeader({
             aria-label={t("navigation.newConversation")}
             title={t("navigation.newConversation")}
           >
-            <svg
-              className="w-5 h-5 text-luckin-secondary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            <Plus size={20} className="text-luckin-secondary" />
           </button>
         )}
         <DepartmentSelector />
-        <LanguageToggle />
         {onHistoryClick && <HistoryButton onClick={onHistoryClick} />}
-        {onSettingsClick && <SettingsButton onClick={onSettingsClick} />}
-        <ThemeToggle />
       </div>
     </header>
   );

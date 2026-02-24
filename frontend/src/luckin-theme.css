@@ -1,93 +1,57 @@
-/* Luckin Coffee Ops Console Theme */
+/* Luckin Coffee "Ask Lucky" Ops Console Theme — Light Mode Only */
 
 :root {
-  /* Light Mode - Primary Colors */
-  --luckin-primary: #0A3A7A;
-  --luckin-primary-hover: #083066;
-  --luckin-primary-light: #1E5CB3;
+  /* Primary Colors */
+  --luckin-primary: #182D71;
+  --luckin-primary-hover: #0F1F52;
+  --luckin-primary-light: #1E3A8A;
+  --luckin-primary-lighter: #3B82F6;
   --luckin-sky: #E8F0FE;
-  --luckin-bg: #F5F7FA;
+  --luckin-bg: #F0F4F8;
   --luckin-surface: #FFFFFF;
-  --luckin-surface-hover: #F0F4F8;
+  --luckin-surface-hover: #F5F8FC;
   --luckin-border: #E2E8F0;
   --luckin-border-light: #EDF2F7;
 
-  /* Light Mode - Text Colors */
-  --luckin-text-primary: #1A202C;
-  --luckin-text-secondary: #4A5568;
-  --luckin-text-muted: #718096;
+  /* Text Colors */
+  --luckin-text-primary: #0F172A;
+  --luckin-text-secondary: #475569;
+  --luckin-text-muted: #94A3B8;
   --luckin-text-inverse: #FFFFFF;
 
-  /* Accent Colors */
+  /* Accent */
   --luckin-accent: #C8A96E;
   --luckin-accent-hover: #B8995E;
   --luckin-accent-light: #F5EFE0;
 
-  /* Status Colors */
-  --luckin-success: #38A169;
-  --luckin-success-bg: #F0FFF4;
-  --luckin-warning: #D69E2E;
-  --luckin-warning-bg: #FFFFF0;
-  --luckin-error: #E53E3E;
-  --luckin-error-bg: #FFF5F5;
-  --luckin-info: #3182CE;
-  --luckin-info-bg: #EBF8FF;
+  /* Status */
+  --luckin-success: #10B981;
+  --luckin-success-bg: #ECFDF5;
+  --luckin-warning: #F59E0B;
+  --luckin-warning-bg: #FFFBEB;
+  --luckin-error: #EF4444;
+  --luckin-error-bg: #FEF2F2;
+  --luckin-info: #3B82F6;
+  --luckin-info-bg: #EFF6FF;
 
   /* Shadows */
-  --luckin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --luckin-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --luckin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --luckin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --luckin-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --luckin-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --luckin-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --luckin-shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  --luckin-shadow-glow: 0 0 30px rgba(24, 45, 113, 0.12);
 
   /* Transitions */
-  --luckin-transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --luckin-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --luckin-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --luckin-transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --luckin-transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Border Radius */
   --luckin-radius-sm: 0.375rem;
   --luckin-radius: 0.5rem;
   --luckin-radius-lg: 0.75rem;
   --luckin-radius-xl: 1rem;
-}
-
-.dark {
-  /* Dark Mode - Primary Colors */
-  --luckin-primary: #1E5CB3;
-  --luckin-primary-hover: #2A6BC4;
-  --luckin-primary-light: #3B82F6;
-  --luckin-sky: #1A365D;
-  --luckin-bg: #060E1A;
-  --luckin-surface: #0C1829;
-  --luckin-surface-hover: #132238;
-  --luckin-border: #1E3A5F;
-  --luckin-border-light: #162D4D;
-
-  /* Dark Mode - Text Colors */
-  --luckin-text-primary: #F7FAFC;
-  --luckin-text-secondary: #CBD5E0;
-  --luckin-text-muted: #A0AEC0;
-  --luckin-text-inverse: #1A202C;
-
-  /* Dark Mode - Accent */
-  --luckin-accent: #D4B87A;
-  --luckin-accent-hover: #E4C88A;
-  --luckin-accent-light: #2D2A1F;
-
-  /* Dark Mode - Status Colors */
-  --luckin-success: #48BB78;
-  --luckin-success-bg: #1C4532;
-  --luckin-warning: #ECC94B;
-  --luckin-warning-bg: #5F4B1A;
-  --luckin-error: #FC8181;
-  --luckin-error-bg: #5C2626;
-  --luckin-info: #63B3ED;
-  --luckin-info-bg: #1A365D;
-
-  /* Dark Mode - Shadows */
-  --luckin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --luckin-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --luckin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --luckin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --luckin-radius-2xl: 1.25rem;
 }
 
 /* Department-specific accent colors */
@@ -119,28 +83,4 @@
 .dept-executive {
   --dept-color: #C8A96E;
   --dept-bg: #F5EFE0;
-}
-
-.dark .dept-marketing {
-  --dept-bg: #5C2626;
-}
-
-.dark .dept-accounting {
-  --dept-bg: #1C4532;
-}
-
-.dark .dept-devops {
-  --dept-bg: #44337A;
-}
-
-.dark .dept-product {
-  --dept-bg: #1A365D;
-}
-
-.dark .dept-supply-chain {
-  --dept-bg: #5F3A1A;
-}
-
-.dark .dept-executive {
-  --dept-bg: #2D2A1F;
 }

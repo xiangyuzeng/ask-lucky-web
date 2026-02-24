@@ -22,15 +22,18 @@ describe("App Routing", () => {
 
   it("renders project selection page at root path", async () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route path="/" element={<ProjectSelector />} />
-        </Routes>
-      </MemoryRouter>,
+      <LanguageProvider>
+        <MemoryRouter initialEntries={["/"]}>
+          <Routes>
+            <Route path="/" element={<ProjectSelector />} />
+          </Routes>
+        </MemoryRouter>
+      </LanguageProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Select a Project")).toBeInTheDocument();
+      // Default language is zh, so check for Chinese text
+      expect(screen.getByText("选择项目")).toBeInTheDocument();
     });
   });
 
@@ -52,7 +55,8 @@ describe("App Routing", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("Luckin Ops Console")).toBeInTheDocument();
+      const elements = screen.getAllByText("Ask Lucky");
+      expect(elements.length).toBeGreaterThan(0);
     });
   });
 });

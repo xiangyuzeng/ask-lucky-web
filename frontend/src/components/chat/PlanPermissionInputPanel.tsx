@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "../../i18n";
 
 interface PlanPermissionInputPanelProps {
   onAcceptWithEdits: () => void;
@@ -29,6 +30,7 @@ export function PlanPermissionInputPanel({
   onSelectionChange, // Optional callback for demo automation
   externalSelectedOption, // Optional external control for demo automation
 }: PlanPermissionInputPanelProps) {
+  const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState<
     "acceptWithEdits" | "acceptDefault" | "keepPlanning" | null
   >("acceptWithEdits");
@@ -102,11 +104,11 @@ export function PlanPermissionInputPanel({
   ]);
 
   return (
-    <div className="flex-shrink-0 px-4 py-4 bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl backdrop-blur-sm shadow-sm">
+    <div className="flex-shrink-0 px-4 py-4 bg-[var(--luckin-surface)] border border-[var(--luckin-border)] rounded-xl shadow-sm">
       {/* Content */}
       <div className="mb-4">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          Choose how to proceed (Press ESC to keep planning)
+        <p className="text-sm text-[var(--luckin-text-muted)]">
+          {t("planPermission.chooseHowToProceed")}
         </p>
       </div>
 
@@ -133,7 +135,7 @@ export function PlanPermissionInputPanel({
             "acceptWithEdits",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "acceptWithEdits"
-                ? "bg-green-50 dark:bg-green-900/20 border-2 border-green-500 dark:border-green-400 shadow-sm"
+                ? "bg-[var(--luckin-success-bg)] border-2 border-[var(--luckin-success)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -141,11 +143,11 @@ export function PlanPermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "acceptWithEdits"
-                ? "text-green-700 dark:text-green-300"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-success)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            Yes, and auto-accept edits
+            {t("planPermission.acceptWithEdits")}
           </span>
         </button>
 
@@ -170,7 +172,7 @@ export function PlanPermissionInputPanel({
             "acceptDefault",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "acceptDefault"
-                ? "bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-500 dark:border-blue-400 shadow-sm"
+                ? "bg-luckin-sky border-2 border-[var(--luckin-primary)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -178,11 +180,11 @@ export function PlanPermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "acceptDefault"
-                ? "text-blue-700 dark:text-blue-300"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-primary)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            Yes, and manually approve edits
+            {t("planPermission.acceptDefault")}
           </span>
         </button>
 
@@ -207,7 +209,7 @@ export function PlanPermissionInputPanel({
             "keepPlanning",
             `w-full p-3 rounded-lg cursor-pointer transition-all duration-200 text-left focus:outline-none ${
               effectiveSelectedOption === "keepPlanning"
-                ? "bg-slate-50 dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-500 shadow-sm"
+                ? "bg-[var(--luckin-bg)] border-2 border-[var(--luckin-text-muted)] shadow-sm"
                 : "border-2 border-transparent"
             }`,
           )}
@@ -215,11 +217,11 @@ export function PlanPermissionInputPanel({
           <span
             className={`text-sm font-medium ${
               effectiveSelectedOption === "keepPlanning"
-                ? "text-slate-800 dark:text-slate-200"
-                : "text-slate-700 dark:text-slate-300"
+                ? "text-[var(--luckin-text-primary)]"
+                : "text-[var(--luckin-text-secondary)]"
             }`}
           >
-            No, keep planning
+            {t("planPermission.keepPlanning")}
           </span>
         </button>
       </div>

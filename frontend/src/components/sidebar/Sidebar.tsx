@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Sparkles, MessageSquare, FileText, X } from "lucide-react";
 import { useTranslation } from "../../i18n";
 import { ConversationList } from "./ConversationList";
 import { PromptTemplates } from "./PromptTemplates";
@@ -59,57 +60,64 @@ export function Sidebar({
       <aside
         className={`
           fixed lg:relative inset-y-0 left-0 z-50
-          w-80 bg-luckin-surface border-r border-luckin
+          w-80 sidebar-dark
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:hidden"}
           flex flex-col
         `}
         aria-label="Sidebar"
       >
-        {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-4 border-b border-luckin">
-          <div className="flex gap-1">
-            <button
-              onClick={() => setActiveTab("conversations")}
-              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-luckin
-                ${
-                  activeTab === "conversations"
-                    ? "bg-luckin-primary text-white"
-                    : "text-luckin-secondary hover:bg-luckin-sky"
-                }`}
-            >
-              {t("sidebar.conversations")}
-            </button>
-            <button
-              onClick={() => setActiveTab("templates")}
-              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-luckin
-                ${
-                  activeTab === "templates"
-                    ? "bg-luckin-primary text-white"
-                    : "text-luckin-secondary hover:bg-luckin-sky"
-                }`}
-            >
-              {t("sidebar.templates")}
-            </button>
+        {/* Branding */}
+        <div className="p-4 pb-2">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-luckin-gradient flex items-center justify-center">
+              <Sparkles size={18} className="text-white" />
+            </div>
+            <span className="text-white text-lg font-bold tracking-tight">
+              Ask Lucky
+            </span>
           </div>
+
+          {/* New Chat button */}
+          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-luckin-gradient text-white text-sm font-medium rounded-xl transition-all duration-200 hover:opacity-90 press-effect">
+            <Sparkles size={16} />
+            {t("sidebar.newChat")}
+          </button>
+        </div>
+
+        {/* Tab buttons */}
+        <div className="flex gap-1 px-4 py-2">
+          <button
+            onClick={() => setActiveTab("conversations")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200
+              ${
+                activeTab === "conversations"
+                  ? "bg-white/10 text-white"
+                  : "text-white/50 hover:text-white/70 hover:bg-white/5"
+              }`}
+          >
+            <MessageSquare size={14} />
+            {t("sidebar.conversations")}
+          </button>
+          <button
+            onClick={() => setActiveTab("templates")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200
+              ${
+                activeTab === "templates"
+                  ? "bg-white/10 text-white"
+                  : "text-white/50 hover:text-white/70 hover:bg-white/5"
+              }`}
+          >
+            <FileText size={14} />
+            {t("sidebar.templates")}
+          </button>
+          <div className="flex-1" />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-luckin-sky transition-luckin lg:hidden"
+            className="p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-all duration-200 lg:hidden"
             aria-label="Close sidebar"
           >
-            <svg
-              className="w-5 h-5 text-luckin-secondary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X size={18} />
           </button>
         </div>
 

@@ -16,19 +16,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setIsInitialized(true);
   }, []);
 
-  // Apply theme changes to document when settings change
+  // Save settings to storage when they change
   useEffect(() => {
     if (!isInitialized) return;
-
-    const root = window.document.documentElement;
-
-    if (settings.theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    // Save settings to storage
     setSettings(settings);
   }, [settings, isInitialized]);
 
@@ -37,10 +27,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    updateSettings({
-      theme: settings.theme === "light" ? "dark" : "light",
-    });
-  }, [settings.theme, updateSettings]);
+    // Light mode only — no-op
+  }, []);
 
   const toggleEnterBehavior = useCallback(() => {
     updateSettings({
@@ -51,7 +39,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     (): SettingsContextType => ({
       settings,
-      theme: settings.theme,
+      theme: "light",
       enterBehavior: settings.enterBehavior,
       toggleTheme,
       toggleEnterBehavior,

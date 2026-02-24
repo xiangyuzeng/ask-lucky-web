@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { X } from "lucide-react";
 import { GeneralSettings } from "./settings/GeneralSettings";
+import { useTranslation } from "../i18n";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+  const { t } = useTranslation();
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
@@ -41,18 +44,18 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl max-w-lg w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-[var(--luckin-surface)] rounded-xl border border-[var(--luckin-border)] shadow-luckin-lg max-w-lg w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">
-            Settings
+        <div className="flex items-center justify-between p-6 border-b border-[var(--luckin-border)] bg-luckin-gradient">
+          <h2 className="text-xl font-semibold text-white">
+            {t("settings.title")}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-            aria-label="Close settings"
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label={t("settings.closeSettings")}
           >
-            <XMarkIcon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+            <X className="w-5 h-5 text-white/80" />
           </button>
         </div>
 

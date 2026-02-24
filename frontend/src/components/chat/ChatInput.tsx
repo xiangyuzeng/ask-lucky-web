@@ -1,9 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
-import { StopIcon } from "@heroicons/react/24/solid";
+import {
+  SendHorizontal,
+  Square,
+  Wrench,
+  Pause,
+  FastForward,
+} from "lucide-react";
 import { UI_CONSTANTS, KEYBOARD_SHORTCUTS } from "../../utils/constants";
 import { useEnterBehavior } from "../../hooks/useSettings";
 import { PermissionInputPanel } from "./PermissionInputPanel";
 import { PlanPermissionInputPanel } from "./PlanPermissionInputPanel";
+import { useTranslation } from "../../i18n";
 import type { PermissionMode } from "../../types";
 
 interface PermissionData {
@@ -68,6 +75,7 @@ export function ChatInput({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [isComposing, setIsComposing] = useState(false);
   const { enterBehavior } = useEnterBehavior();
+  const { t } = useTranslation();
 
   // Focus input when not loading and not in permission mode
   useEffect(() => {
@@ -148,27 +156,42 @@ export function ChatInput({
     setTimeout(() => setIsComposing(false), 0);
   };
 
-  // Get permission mode status indicator (CLI-style)
-  const getPermissionModeIndicator = (mode: PermissionMode): string => {
+  // Get permission mode status indicator with Lucide icon
+  const getPermissionModeIndicator = (mode: PermissionMode) => {
     switch (mode) {
       case "default":
-        return "🔧 normal mode";
+        return (
+          <span className="inline-flex items-center gap-1">
+            <Wrench size={14} />
+            <span>{"\u666E\u901A\u6A21\u5F0F"}</span>
+          </span>
+        );
       case "plan":
-        return "⏸ plan mode";
+        return (
+          <span className="inline-flex items-center gap-1">
+            <Pause size={14} />
+            <span>{"\u89C4\u5212\u6A21\u5F0F"}</span>
+          </span>
+        );
       case "acceptEdits":
-        return "⏵⏵ accept edits";
+        return (
+          <span className="inline-flex items-center gap-1">
+            <FastForward size={14} />
+            <span>{"\u81EA\u52A8\u6A21\u5F0F"}</span>
+          </span>
+        );
     }
   };
 
-  // Get clean permission mode name (without emoji)
+  // Get clean permission mode name (without icon)
   const getPermissionModeName = (mode: PermissionMode): string => {
     switch (mode) {
       case "default":
-        return "normal mode";
+        return "\u666E\u901A\u6A21\u5F0F";
       case "plan":
-        return "plan mode";
+        return "\u89C4\u5212\u6A21\u5F0F";
       case "acceptEdits":
-        return "accept edits";
+        return "\u81EA\u52A8\u6A21\u5F0F";
     }
   };
 
@@ -219,10 +242,12 @@ export function ChatInput({
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
           placeholder={
-            isLoading && currentRequestId ? "Processing..." : "Type message..."
+            isLoading && currentRequestId
+              ? "Processing..."
+              : t("chat.placeholder")
           }
           rows={1}
-          className={`w-full px-4 py-3 pr-20 bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 backdrop-blur-sm shadow-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 resize-none overflow-hidden min-h-[48px] max-h-[${UI_CONSTANTS.TEXTAREA_MAX_HEIGHT}px]`}
+          className={`w-full px-4 py-3 pr-20 bg-[var(--luckin-surface)] border border-[var(--luckin-border)] rounded-2xl focus:ring-2 focus:ring-[var(--luckin-primary-lighter)] focus:border-transparent transition-all duration-200 shadow-sm text-[var(--luckin-text-primary)] placeholder-[var(--luckin-text-muted)] resize-none overflow-hidden min-h-[48px] max-h-[${UI_CONSTANTS.TEXTAREA_MAX_HEIGHT}px]`}
           disabled={isLoading}
         />
         <div className="absolute right-2 bottom-3 flex gap-2">
@@ -230,18 +255,27 @@ export function ChatInput({
             <button
               type="button"
               onClick={onAbort}
-              className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+              className="p-2 bg-[var(--luckin-error-bg)] hover:bg-[var(--luckin-error-bg)] text-[var(--luckin-error)] rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
               title="Stop (ESC)"
             >
-              <StopIcon className="w-4 h-4" />
+              <Square className="w-4 h-4" />
             </button>
           )}
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 text-sm"
+            className="px-4 py-2 bg-luckin-gradient disabled:bg-[var(--luckin-text-muted)] text-[var(--luckin-text-inverse)] rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 text-sm flex items-center gap-1.5"
           >
-            {isLoading ? "..." : permissionMode === "plan" ? "Plan" : "Send"}
+            {isLoading ? (
+              "..."
+            ) : (
+              <>
+                <SendHorizontal size={16} />
+                <span>
+                  {permissionMode === "plan" ? t("chat.plan") : t("chat.send")}
+                </span>
+              </>
+            )}
           </button>
         </div>
       </form>
@@ -252,11 +286,11 @@ export function ChatInput({
         onClick={() =>
           onPermissionModeChange(getNextPermissionMode(permissionMode))
         }
-        className="w-full px-4 py-1 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-mono text-left transition-colors cursor-pointer"
+        className="w-full px-4 py-1 text-xs text-[var(--luckin-text-secondary)] hover:text-[var(--luckin-text-primary)] font-mono text-left transition-colors cursor-pointer"
         title={`Current: ${getPermissionModeName(permissionMode)} - Click to cycle (Ctrl+Shift+M)`}
       >
         {getPermissionModeIndicator(permissionMode)}
-        <span className="ml-2 text-slate-400 dark:text-slate-500 text-[10px]">
+        <span className="ml-2 text-[var(--luckin-text-muted)] text-[10px]">
           - Click to cycle (Ctrl+Shift+M)
         </span>
       </button>

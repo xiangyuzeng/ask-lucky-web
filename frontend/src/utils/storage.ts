@@ -57,15 +57,8 @@ export function setSettings(settings: AppSettings): void {
 }
 
 function migrateLegacySettings(): AppSettings {
-  // Get system theme preference
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const systemDefaultTheme: Theme = prefersDark ? "dark" : "light";
-
-  // Load legacy settings
-  const legacyTheme = getStorageItem<Theme>(
-    STORAGE_KEYS.THEME,
-    systemDefaultTheme,
-  );
+  // Always light mode
+  const legacyTheme: Theme = "light";
   const legacyEnterBehavior = getStorageItem<EnterBehavior>(
     STORAGE_KEYS.ENTER_BEHAVIOR,
     "send",

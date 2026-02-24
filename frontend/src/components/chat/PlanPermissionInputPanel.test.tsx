@@ -1,12 +1,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { PlanPermissionInputPanel } from "./PlanPermissionInputPanel";
+import { LanguageProvider } from "../../i18n";
+
+// Helper to wrap component in LanguageProvider
+function renderWithProviders(ui: React.ReactElement) {
+  return render(<LanguageProvider>{ui}</LanguageProvider>);
+}
 
 describe("PlanPermissionInputPanel", () => {
   const mockOnAcceptWithEdits = vi.fn();
   const mockOnAcceptDefault = vi.fn();
   const mockOnKeepPlanning = vi.fn();
   const mockOnSelectionChange = vi.fn();
+
+  // Chinese text from zh.json (default language)
+  const TEXT_ACCEPT_WITH_EDITS = "是，自动接受编辑";
+  const TEXT_ACCEPT_DEFAULT = "是，手动审批编辑";
+  const TEXT_KEEP_PLANNING = "否，继续规划";
+  const TEXT_HELPER = "选择如何继续（按 ESC 继续规划）";
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -19,7 +31,7 @@ describe("PlanPermissionInputPanel", () => {
 
   describe("Basic Rendering", () => {
     it("should render all three permission options", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -27,17 +39,13 @@ describe("PlanPermissionInputPanel", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Yes, and auto-accept edits"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Yes, and manually approve edits"),
-      ).toBeInTheDocument();
-      expect(screen.getByText("No, keep planning")).toBeInTheDocument();
+      expect(screen.getByText(TEXT_ACCEPT_WITH_EDITS)).toBeInTheDocument();
+      expect(screen.getByText(TEXT_ACCEPT_DEFAULT)).toBeInTheDocument();
+      expect(screen.getByText(TEXT_KEEP_PLANNING)).toBeInTheDocument();
     });
 
     it("should render helper text", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -45,13 +53,11 @@ describe("PlanPermissionInputPanel", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Choose how to proceed (Press ESC to keep planning)"),
-      ).toBeInTheDocument();
+      expect(screen.getByText(TEXT_HELPER)).toBeInTheDocument();
     });
 
     it("should initially select 'acceptWithEdits' option", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -60,18 +66,18 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptWithEditsButton = screen
-        .getByText("Yes, and auto-accept edits")
+        .getByText(TEXT_ACCEPT_WITH_EDITS)
         .closest("button")!;
       expect(acceptWithEditsButton).toHaveClass(
-        "bg-green-50",
-        "border-green-500",
+        "bg-[var(--luckin-success-bg)]",
+        "border-[var(--luckin-success)]",
       );
     });
   });
 
   describe("Mouse Interactions", () => {
     it("should call onAcceptWithEdits when accept with edits button is clicked", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -79,12 +85,12 @@ describe("PlanPermissionInputPanel", () => {
         />,
       );
 
-      fireEvent.click(screen.getByText("Yes, and auto-accept edits"));
+      fireEvent.click(screen.getByText(TEXT_ACCEPT_WITH_EDITS));
       expect(mockOnAcceptWithEdits).toHaveBeenCalledTimes(1);
     });
 
     it("should call onAcceptDefault when accept default button is clicked", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -92,12 +98,12 @@ describe("PlanPermissionInputPanel", () => {
         />,
       );
 
-      fireEvent.click(screen.getByText("Yes, and manually approve edits"));
+      fireEvent.click(screen.getByText(TEXT_ACCEPT_DEFAULT));
       expect(mockOnAcceptDefault).toHaveBeenCalledTimes(1);
     });
 
     it("should call onKeepPlanning when keep planning button is clicked", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -105,12 +111,12 @@ describe("PlanPermissionInputPanel", () => {
         />,
       );
 
-      fireEvent.click(screen.getByText("No, keep planning"));
+      fireEvent.click(screen.getByText(TEXT_KEEP_PLANNING));
       expect(mockOnKeepPlanning).toHaveBeenCalledTimes(1);
     });
 
     it("should update selection on mouse enter", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -120,18 +126,21 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
       fireEvent.mouseEnter(acceptDefaultButton);
 
       expect(mockOnSelectionChange).toHaveBeenCalledWith("acceptDefault");
-      expect(acceptDefaultButton).toHaveClass("bg-blue-50", "border-blue-500");
+      expect(acceptDefaultButton).toHaveClass(
+        "bg-luckin-sky",
+        "border-[var(--luckin-primary)]",
+      );
     });
   });
 
   describe("Keyboard Navigation", () => {
     it("should navigate down with ArrowDown key", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -147,7 +156,7 @@ describe("PlanPermissionInputPanel", () => {
     });
 
     it("should navigate up with ArrowUp key", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -163,7 +172,7 @@ describe("PlanPermissionInputPanel", () => {
     });
 
     it("should cycle through options with multiple ArrowDown presses", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -186,7 +195,7 @@ describe("PlanPermissionInputPanel", () => {
     });
 
     it("should execute selected option with Enter key", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -210,7 +219,7 @@ describe("PlanPermissionInputPanel", () => {
     });
 
     it("should call onKeepPlanning when Escape key is pressed", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -225,7 +234,7 @@ describe("PlanPermissionInputPanel", () => {
 
   describe("External Control Mode (Demo Automation)", () => {
     it("should use external selection when provided", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -235,13 +244,16 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
-      expect(acceptDefaultButton).toHaveClass("bg-blue-50", "border-blue-500");
+      expect(acceptDefaultButton).toHaveClass(
+        "bg-luckin-sky",
+        "border-[var(--luckin-primary)]",
+      );
     });
 
     it("should not respond to keyboard navigation when externally controlled", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -259,13 +271,16 @@ describe("PlanPermissionInputPanel", () => {
 
       // Selection should remain on acceptDefault
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
-      expect(acceptDefaultButton).toHaveClass("bg-blue-50", "border-blue-500");
+      expect(acceptDefaultButton).toHaveClass(
+        "bg-luckin-sky",
+        "border-[var(--luckin-primary)]",
+      );
     });
 
     it("should not reset selection on mouse leave when externally controlled", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -275,39 +290,49 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
 
       fireEvent.mouseLeave(acceptDefaultButton);
 
       // Selection should remain unchanged in external control mode
-      expect(acceptDefaultButton).toHaveClass("bg-blue-50", "border-blue-500");
+      expect(acceptDefaultButton).toHaveClass(
+        "bg-luckin-sky",
+        "border-[var(--luckin-primary)]",
+      );
     });
 
     it("should handle external selection change", () => {
       const { rerender } = render(
-        <PlanPermissionInputPanel
-          onAcceptWithEdits={mockOnAcceptWithEdits}
-          onAcceptDefault={mockOnAcceptDefault}
-          onKeepPlanning={mockOnKeepPlanning}
-          externalSelectedOption="acceptDefault"
-        />,
+        <LanguageProvider>
+          <PlanPermissionInputPanel
+            onAcceptWithEdits={mockOnAcceptWithEdits}
+            onAcceptDefault={mockOnAcceptDefault}
+            onKeepPlanning={mockOnKeepPlanning}
+            externalSelectedOption="acceptDefault"
+          />
+        </LanguageProvider>,
       );
 
       // Change external selection
       rerender(
-        <PlanPermissionInputPanel
-          onAcceptWithEdits={mockOnAcceptWithEdits}
-          onAcceptDefault={mockOnAcceptDefault}
-          onKeepPlanning={mockOnKeepPlanning}
-          externalSelectedOption="keepPlanning"
-        />,
+        <LanguageProvider>
+          <PlanPermissionInputPanel
+            onAcceptWithEdits={mockOnAcceptWithEdits}
+            onAcceptDefault={mockOnAcceptDefault}
+            onKeepPlanning={mockOnKeepPlanning}
+            externalSelectedOption="keepPlanning"
+          />
+        </LanguageProvider>,
       );
 
       const keepPlanningButton = screen
-        .getByText("No, keep planning")
+        .getByText(TEXT_KEEP_PLANNING)
         .closest("button")!;
-      expect(keepPlanningButton).toHaveClass("bg-slate-50", "border-slate-400");
+      expect(keepPlanningButton).toHaveClass(
+        "bg-[var(--luckin-bg)]",
+        "border-[var(--luckin-text-muted)]",
+      );
     });
   });
 
@@ -318,7 +343,7 @@ describe("PlanPermissionInputPanel", () => {
           `${defaultClassName} custom-${buttonType}`,
       );
 
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -341,7 +366,7 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptWithEditsButton = screen
-        .getByText("Yes, and auto-accept edits")
+        .getByText(TEXT_ACCEPT_WITH_EDITS)
         .closest("button")!;
       expect(acceptWithEditsButton).toHaveClass("custom-acceptWithEdits");
     });
@@ -349,7 +374,7 @@ describe("PlanPermissionInputPanel", () => {
 
   describe("Focus Management", () => {
     it("should update selection on focus", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -359,7 +384,7 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
       fireEvent.focus(acceptDefaultButton);
 
@@ -367,7 +392,7 @@ describe("PlanPermissionInputPanel", () => {
     });
 
     it("should clear selection on blur when not externally controlled", () => {
-      render(
+      renderWithProviders(
         <PlanPermissionInputPanel
           onAcceptWithEdits={mockOnAcceptWithEdits}
           onAcceptDefault={mockOnAcceptDefault}
@@ -376,7 +401,7 @@ describe("PlanPermissionInputPanel", () => {
       );
 
       const acceptDefaultButton = screen
-        .getByText("Yes, and manually approve edits")
+        .getByText(TEXT_ACCEPT_DEFAULT)
         .closest("button")!;
 
       fireEvent.focus(acceptDefaultButton);
@@ -384,8 +409,8 @@ describe("PlanPermissionInputPanel", () => {
 
       // After blur, no button should have selected styling
       expect(acceptDefaultButton).not.toHaveClass(
-        "bg-blue-50",
-        "border-blue-500",
+        "bg-luckin-sky",
+        "border-[var(--luckin-primary)]",
       );
     });
   });

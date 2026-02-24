@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "./luckin-theme.css";
 
-@variant dark (.dark &);
-
 /* Base styles */
 body {
   font-family: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
@@ -151,3 +149,178 @@ body {
 .transition-luckin-slow {
   transition: all var(--luckin-transition-slow);
 }
+
+/* ================================================
+   Luckin Brand Utilities
+   ================================================ */
+
+/* Gradient utilities */
+.bg-luckin-gradient {
+  background: linear-gradient(135deg, var(--luckin-primary), var(--luckin-primary-light));
+}
+
+.text-luckin-gradient {
+  background: linear-gradient(135deg, #182D71, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism */
+.glass-luckin {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Glow effects */
+.hover-glow-luckin {
+  transition: box-shadow var(--luckin-transition), transform var(--luckin-transition);
+}
+.hover-glow-luckin:hover {
+  box-shadow: var(--luckin-shadow-glow);
+}
+
+.hover-lift {
+  transition: transform var(--luckin-transition), box-shadow var(--luckin-transition);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(24, 45, 113, 0.12);
+}
+
+/* Chat bubble shapes */
+.bubble-user {
+  border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+}
+.bubble-assistant {
+  border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+}
+
+/* Frosted header */
+.header-frosted {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Active press effect */
+.press-effect:active {
+  transform: scale(0.98);
+  transition: transform 100ms ease;
+}
+
+/* Sidebar dark theme */
+.sidebar-dark {
+  background: #0F172A;
+  color: #E2E8F0;
+}
+
+.sidebar-dark a:hover,
+.sidebar-dark button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ================================================
+   Animations
+   ================================================ */
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeSlideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes waveDots {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animation utility classes */
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.4s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+.animate-gradient-bg {
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+.animate-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 936px 100%;
+  animation: skeletonShimmer 1.8s linear infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 2s linear infinite;
+}
+
+/* Stagger delays for card entrance animations */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 160ms; }
+.stagger-4 { animation-delay: 240ms; }
+.stagger-5 { animation-delay: 320ms; }
+.stagger-6 { animation-delay: 400ms; }
+.stagger-7 { animation-delay: 480ms; }

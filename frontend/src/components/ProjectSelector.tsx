@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FolderIcon } from "@heroicons/react/24/outline";
+import { FolderOpen, AlertCircle, Loader2 } from "lucide-react";
 import type { ProjectsResponse, ProjectInfo } from "../types";
 import { getProjectsUrl } from "../config/api";
-import { SettingsButton } from "./SettingsButton";
-import { SettingsModal } from "./SettingsModal";
+import { useTranslation } from "../i18n";
 
 export function ProjectSelector() {
   const [projects, setProjects] = useState<ProjectInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadProjects();
@@ -22,12 +21,12 @@ export function ProjectSelector() {
       setLoading(true);
       const response = await fetch(getProjectsUrl());
       if (!response.ok) {
-        throw new Error(`Failed to load projects: ${response.statusText}`);
+        throw new Error(response.statusText);
       }
       const data: ProjectsResponse = await response.json();
       setProjects(data.projects);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load projects");
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -40,19 +39,12 @@ export function ProjectSelector() {
     navigate(`/projects${normalizedPath}`);
   };
 
-  const handleSettingsClick = () => {
-    setIsSettingsOpen(true);
-  };
-
-  const handleSettingsClose = () => {
-    setIsSettingsOpen(false);
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-slate-600 dark:text-slate-400">
-          Loading projects...
+      <div className="flex items-center justify-center min-h-screen bg-[var(--luckin-bg)]">
+        <div className="flex items-center gap-3 text-[var(--luckin-text-secondary)]">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span>{t("projectSelector.loading")}</span>
         </div>
       </div>
     );
@@ -60,37 +52,46 @@ export function ProjectSelector() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-600 dark:text-red-400">Error: {error}</div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--luckin-bg)] gap-4">
+        <div className="flex items-center gap-3 text-[var(--luckin-error)]">
+          <AlertCircle className="w-5 h-5" />
+          <span>{t("projectSelector.error", { error })}</span>
+        </div>
+        <button
+          onClick={() => {
+            setError(null);
+            loadProjects();
+          }}
+          className="px-4 py-2 rounded-lg bg-[var(--luckin-primary)] text-white hover:bg-[var(--luckin-primary-hover)] transition-colors"
+        >
+          {t("common.retry")}
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div className="min-h-screen bg-[var(--luckin-bg)] transition-colors duration-300">
       <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-slate-800 dark:text-slate-100 text-3xl font-bold tracking-tight">
-            Select a Project
-          </h1>
-          <SettingsButton onClick={handleSettingsClick} />
-        </div>
+        <h1 className="text-[var(--luckin-text-primary)] text-3xl font-bold tracking-tight mb-8">
+          {t("projectSelector.title")}
+        </h1>
 
         <div className="space-y-3">
           {projects.length > 0 && (
             <>
-              <h2 className="text-slate-700 dark:text-slate-300 text-lg font-medium mb-4">
-                Recent Projects
+              <h2 className="text-[var(--luckin-text-secondary)] text-lg font-medium mb-4">
+                {t("projectSelector.recentProjects")}
               </h2>
-              {projects.map((project) => (
+              {projects.map((project, index) => (
                 <button
                   key={project.path}
                   onClick={() => handleProjectSelect(project.path)}
-                  className="w-full flex items-center gap-3 p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors text-left"
+                  className={`w-full flex items-center gap-3 p-4 glass-luckin hover-lift rounded-lg transition-all duration-200 text-left animate-fade-slide-up stagger-${Math.min(index + 1, 7)}`}
                 >
-                  <FolderIcon className="h-5 w-5 text-slate-500 dark:text-slate-400 flex-shrink-0" />
-                  <span className="text-slate-800 dark:text-slate-200 font-mono text-sm">
+                  <FolderOpen className="h-5 w-5 text-[var(--luckin-primary)] flex-shrink-0" />
+                  <span className="text-[var(--luckin-text-primary)] font-mono text-sm">
                     {project.path}
                   </span>
                 </button>
@@ -98,9 +99,6 @@ export function ProjectSelector() {
             </>
           )}
         </div>
-
-        {/* Settings Modal */}
-        <SettingsModal isOpen={isSettingsOpen} onClose={handleSettingsClose} />
       </div>
     </div>
   );

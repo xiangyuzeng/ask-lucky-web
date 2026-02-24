@@ -48,7 +48,12 @@ export async function handleProjectsRequest(c: Context) {
       }
     } catch (error) {
       // Handle file not found errors in a cross-platform way
-      if (error instanceof Error && error.message.includes("No such file")) {
+      // Node.js uses error.code "ENOENT", Deno uses "No such file" in message
+      const isNotFound =
+        (error as NodeJS.ErrnoException).code === "ENOENT" ||
+        (error instanceof Error &&
+          error.message.toLowerCase().includes("no such file"));
+      if (isNotFound) {
         const response: ProjectsResponse = { projects: [] };
         return c.json(response);
       }
