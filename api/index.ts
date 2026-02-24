@@ -9,11 +9,11 @@ import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import { cors } from "hono/cors";
 import { createMiddleware } from "hono/factory";
-import { handleChatRequest } from "../backend/handlers/chat.ts";
-import { handleProjectsRequest } from "../backend/handlers/projects.ts";
-import { handleAbortRequest } from "../backend/handlers/abort.ts";
-import { handleHistoriesRequest } from "../backend/handlers/histories.ts";
-import { handleConversationRequest } from "../backend/handlers/conversations.ts";
+import { handleChatRequest } from "../backend/handlers/chat";
+import { handleProjectsRequest } from "../backend/handlers/projects";
+import { handleAbortRequest } from "../backend/handlers/abort";
+import { handleHistoriesRequest } from "../backend/handlers/histories";
+import { handleConversationRequest } from "../backend/handlers/conversations";
 
 export const config = {
   runtime: "nodejs",

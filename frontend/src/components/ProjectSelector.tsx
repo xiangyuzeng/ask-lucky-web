@@ -31,8 +31,11 @@ export function ProjectSelector() {
         return;
       }
       setProjects(data.projects);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch {
+      // API failed (e.g., serverless function error on Vercel)
+      // Auto-navigate to default project instead of showing error
+      navigate("/projects/default");
+      return;
     } finally {
       setLoading(false);
     }
