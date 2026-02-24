@@ -7,9 +7,8 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
     "noEmit": true,
     "lib": ["ES2022", "DOM"]
   },
-  "include": ["./**/*.ts", "../backend/**/*.ts", "../shared/**/*.ts"]
+  "include": ["./**/*.ts"]
 }
