@@ -16,7 +16,7 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
   const { t } = useTranslation();
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
   // Timeout to stop loading if encodedName never arrives
   useEffect(() => {
