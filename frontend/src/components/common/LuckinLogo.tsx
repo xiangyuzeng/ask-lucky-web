@@ -10,25 +10,20 @@ export function LuckinLogo({
   showPulse = false,
 }: LuckinLogoProps) {
   return (
-    <div
+    <img
       role="img"
       aria-label="Luckin Logo"
-      className={`inline-flex items-center justify-center rounded-full overflow-hidden ${showPulse ? "animate-pulse-soft" : ""} ${className}`}
+      src="/luckin-deer.svg"
+      alt=""
+      width={size}
+      height={size}
+      className={`${showPulse ? "animate-pulse-soft" : ""} ${className}`}
       style={{
-        width: size,
-        height: size,
-        backgroundColor: "#0A3A7A",
+        borderRadius: "50%",
         flexShrink: 0,
+        objectFit: "contain",
       }}
-    >
-      <img
-        src="/luckin-logo.png"
-        alt=""
-        width={size * 0.82}
-        height={size * 0.82}
-        style={{ objectFit: "contain", mixBlendMode: "screen" }}
-        draggable={false}
-      />
-    </div>
+      draggable={false}
+    />
   );
 }
