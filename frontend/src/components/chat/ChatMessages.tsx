@@ -24,7 +24,8 @@ import { useTranslation } from "../../i18n";
 import { useDepartment } from "../../contexts/DepartmentContext";
 import { departments } from "../../data/departments";
 import { DepartmentQuickActions } from "./DepartmentQuickActions";
-import { MessageSquare } from "lucide-react";
+import { LuckinLogo } from "../common/LuckinLogo";
+import { MessageSquare, FileText, Lightbulb } from "lucide-react";
 
 interface ChatMessagesProps {
   messages: AllMessage[];
@@ -108,45 +109,109 @@ function EmptyState({ onQuickAction }: EmptyStateProps) {
   const DeptIcon: ComponentType<{ className?: string; size?: number }> =
     currentDept.icon;
 
+  const tipCards = [
+    {
+      icon: MessageSquare,
+      title: t("chat.emptyState.tip1Title"),
+      desc: t("chat.emptyState.tip1Desc"),
+    },
+    {
+      icon: FileText,
+      title: t("chat.emptyState.tip2Title"),
+      desc: t("chat.emptyState.tip2Desc"),
+    },
+    {
+      icon: Lightbulb,
+      title: t("chat.emptyState.tip3Title"),
+      desc: t("chat.emptyState.tip3Desc"),
+    },
+  ];
+
   return (
-    <div className="flex-1 flex items-center justify-center text-center text-[var(--luckin-text-secondary)]">
-      <div>
-        {isDepartmentSelected ? (
-          <>
-            {/* Department-specific welcome */}
-            <div className="mb-6 flex justify-center" style={{ opacity: 0.8 }}>
-              <DeptIcon
-                size={48}
-                className="text-[var(--luckin-text-secondary)]"
-              />
-            </div>
-            <p className="text-lg font-bold text-[var(--luckin-text-primary)]">
-              {t(`departments.${department}.name`)}
-            </p>
-            <p className="text-sm mt-2 text-[var(--luckin-text-muted)]">
-              {t(`departments.${department}.description`)}
-            </p>
-            {onQuickAction && (
-              <DepartmentQuickActions onActionClick={onQuickAction} />
-            )}
-          </>
-        ) : (
-          <>
-            {/* Generic welcome */}
-            <div className="mb-6 flex justify-center opacity-60">
-              <MessageSquare
-                size={48}
-                className="text-[var(--luckin-text-secondary)]"
-              />
-            </div>
-            <p className="text-lg font-medium text-[var(--luckin-text-primary)]">
-              {t("chat.emptyState.title")}
-            </p>
-            <p className="text-sm mt-2 text-[var(--luckin-text-muted)]">
-              {t("chat.emptyState.subtitle")}
-            </p>
-          </>
+    <div className="flex-1 flex items-center justify-center">
+      <div className="max-w-2xl w-full px-4">
+        {/* Logo + Welcome Header */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <LuckinLogo size={64} />
+          </div>
+          {isDepartmentSelected ? (
+            <>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <DeptIcon size={20} className="text-[var(--luckin-primary)]" />
+                <h2 className="text-xl font-bold text-[var(--luckin-text-primary)]">
+                  {t(`departments.${department}.name`)}
+                </h2>
+              </div>
+              <p className="text-sm text-[var(--luckin-text-secondary)] mb-1">
+                {t(`departments.${department}.description`)}
+              </p>
+              <p className="text-sm text-[var(--luckin-text-muted)]">
+                {t("chat.emptyState.deptWelcome")}
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold text-[var(--luckin-text-primary)] mb-2">
+                {t("chat.emptyState.title")}
+              </h2>
+              <p className="text-sm text-[var(--luckin-text-secondary)] max-w-md mx-auto">
+                {t("chat.emptyState.welcomeDesc")}
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Quick Actions (department-specific) */}
+        {isDepartmentSelected && onQuickAction && (
+          <div className="mb-8">
+            <DepartmentQuickActions onActionClick={onQuickAction} />
+          </div>
         )}
+
+        {/* Capability Tip Cards */}
+        <div className="mb-6">
+          <p className="text-xs font-semibold text-[var(--luckin-text-muted)] uppercase tracking-wider text-center mb-4">
+            {t("chat.emptyState.capabilities")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {tipCards.map((tip, i) => {
+              const TipIcon = tip.icon;
+              return (
+                <div
+                  key={i}
+                  className="p-4 rounded-xl border border-[var(--luckin-border)] bg-white/70 hover:bg-white hover:shadow-md transition-all duration-200"
+                  style={{
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center mb-3"
+                    style={{
+                      background: "rgba(24, 45, 113, 0.08)",
+                    }}
+                  >
+                    <TipIcon
+                      size={18}
+                      className="text-[var(--luckin-primary)]"
+                    />
+                  </div>
+                  <h4 className="text-sm font-semibold text-[var(--luckin-text-primary)] mb-1">
+                    {tip.title}
+                  </h4>
+                  <p className="text-xs text-[var(--luckin-text-muted)] leading-relaxed">
+                    {tip.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer hint */}
+        <p className="text-center text-xs text-[var(--luckin-text-muted)]">
+          {t("chat.emptyState.subtitle")}
+        </p>
       </div>
     </div>
   );

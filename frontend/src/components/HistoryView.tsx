@@ -18,10 +18,19 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Timeout to stop loading if encodedName never arrives
+  useEffect(() => {
+    if (!encodedName) {
+      const timeout = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [encodedName]);
+
   useEffect(() => {
     const loadConversations = async () => {
       if (!encodedName) {
-        // Keep loading state when encodedName is not available yet
         return;
       }
 
@@ -30,16 +39,16 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
         const response = await fetch(getHistoriesUrl(encodedName));
 
         if (!response.ok) {
-          throw new Error(
-            `Failed to load conversations: ${response.statusText}`,
-          );
+          // On Vercel, API may not support histories — treat as empty
+          setConversations([]);
+          return;
         }
         const data = await response.json();
         setConversations(data.conversations || []);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load conversations",
-        );
+      } catch {
+        // On Vercel deployment, histories API returns stub data
+        // Show empty state instead of error
+        setConversations([]);
       } finally {
         setLoading(false);
       }
@@ -54,15 +63,13 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
     navigate({ search: searchParams.toString() });
   };
 
-  if (loading || !encodedName) {
+  if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-[var(--luckin-border)] border-t-[var(--luckin-primary)] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-[var(--luckin-text-secondary)]">
-            {!encodedName
-              ? t("history.loadingProject")
-              : t("history.loadingConversations")}
+            {t("history.loadingConversations")}
           </p>
         </div>
       </div>

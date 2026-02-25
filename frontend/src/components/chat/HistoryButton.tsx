@@ -8,10 +8,10 @@ export function HistoryButton({ onClick }: HistoryButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="p-3 rounded-xl bg-[var(--luckin-surface)] border border-[var(--luckin-border)] hover:bg-[var(--luckin-surface-hover)] transition-all duration-200 shadow-sm hover:shadow-md"
+      className="p-2 rounded-lg bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-200"
       aria-label="View conversation history"
     >
-      <Clock className="w-5 h-5 text-[var(--luckin-text-secondary)]" />
+      <Clock className="w-5 h-5 text-white/80" />
     </button>
   );
 }

@@ -98,7 +98,16 @@
     "assistant": "Lucky",
     "emptyState": {
       "title": "开始与 Lucky 对话",
-      "subtitle": "在下方输入您的问题"
+      "subtitle": "在下方输入您的问题",
+      "welcomeDesc": "您的AI智能运营助手已就绪，可帮助您进行数据分析、报告生成和战略洞察。",
+      "tip1Title": "提出问题",
+      "tip1Desc": "尝试询问KPI、报告或运营指标",
+      "tip2Title": "生成报告",
+      "tip2Desc": "创建财务摘要、营销分析或绩效评估",
+      "tip3Title": "获取洞察",
+      "tip3Desc": "发现趋势、识别风险、寻找优化机会",
+      "deptWelcome": "今天我能为您的团队做些什么？",
+      "capabilities": "Lucky 能做什么"
     }
   },
   "feedback": {

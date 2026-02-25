@@ -97,7 +97,16 @@
     "assistant": "Lucky",
     "emptyState": {
       "title": "Start a conversation with Lucky",
-      "subtitle": "Type your message below to begin"
+      "subtitle": "Type your message below to begin",
+      "welcomeDesc": "Your AI-powered operations assistant is ready to help with data analysis, report generation, and strategic insights.",
+      "tip1Title": "Ask a Question",
+      "tip1Desc": "Try asking about KPIs, reports, or operational metrics",
+      "tip2Title": "Generate Reports",
+      "tip2Desc": "Create financial summaries, marketing analyses, or performance reviews",
+      "tip3Title": "Get Insights",
+      "tip3Desc": "Discover trends, identify risks, and find optimization opportunities",
+      "deptWelcome": "How can I help your team today?",
+      "capabilities": "What Lucky Can Do"
     }
   },
   "feedback": {

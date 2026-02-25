@@ -10,10 +10,11 @@ export function AnimatedBackground({ children }: AnimatedBackgroundProps) {
         className="absolute inset-0 animate-gradient-bg"
         style={{
           background: [
-            "radial-gradient(ellipse 80% 60% at 20% 30%, rgba(24, 45, 113, 0.05) 0%, transparent 70%)",
-            "radial-gradient(ellipse 60% 80% at 80% 70%, rgba(59, 130, 246, 0.03) 0%, transparent 70%)",
-            "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(232, 240, 254, 0.30) 0%, transparent 80%)",
-            "linear-gradient(135deg, #F0F4F8 0%, #F0F4F8 100%)",
+            "radial-gradient(ellipse 80% 60% at 20% 30%, rgba(24, 45, 113, 0.12) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 80% at 80% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
+            "radial-gradient(ellipse 90% 60% at 60% 20%, rgba(24, 45, 113, 0.06) 0%, transparent 60%)",
+            "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(232, 240, 254, 0.40) 0%, transparent 80%)",
+            "linear-gradient(135deg, #E8EEF5 0%, #DDE6F2 50%, #E8EEF5 100%)",
           ].join(", "),
           backgroundSize: "400% 400%",
         }}
@@ -25,7 +26,7 @@ export function AnimatedBackground({ children }: AnimatedBackgroundProps) {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(24, 45, 113, 0.05) 1px, transparent 1px)",
+            "radial-gradient(circle, rgba(24, 45, 113, 0.07) 1px, transparent 1px)",
           backgroundSize: "20px 20px",
         }}
         aria-hidden="true"

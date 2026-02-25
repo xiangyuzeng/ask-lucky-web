@@ -22,7 +22,7 @@ export function DepartmentTile({
       onClick={() => onClick(departmentId)}
       className={`
         group relative p-6
-        glass-luckin rounded-[var(--luckin-radius-2xl)]
+        rounded-[var(--luckin-radius-2xl)]
         hover-lift press-effect
         cursor-pointer
         flex flex-col items-center text-center
@@ -34,12 +34,17 @@ export function DepartmentTile({
           animationDelay: `${index * 80}ms`,
           opacity: 0,
           "--dept-accent": dept.color,
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(232,240,254,0.7) 100%)",
+          border: "1px solid rgba(24, 45, 113, 0.1)",
+          boxShadow:
+            "0 2px 8px rgba(24, 45, 113, 0.08), 0 1px 3px rgba(24, 45, 113, 0.04)",
         } as React.CSSProperties
       }
     >
       {/* Top gradient border line */}
       <div
-        className="absolute top-0 left-4 right-4 h-[3px] rounded-full"
+        className="absolute top-0 left-4 right-4 h-[4px] rounded-full"
         style={{
           background: `linear-gradient(90deg, ${dept.color}, ${dept.color}88)`,
         }}
